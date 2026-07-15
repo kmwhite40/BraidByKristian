@@ -2,7 +2,7 @@
 
 ## The honest state of this
 
-**Four photographs exist.** They are cropped from the brand photography Kristian publishes on her own Acuity booking page:
+**Six photographs exist**, supplied as full-resolution originals from Kristian's brand shoot. They replaced an earlier set cropped out of her booking-site flyers, which paint black mask bars across the images:
 
 | File | What it is |
 | --- | --- |
@@ -19,7 +19,14 @@ That is the whole library, and it is the site's biggest gap. **The single highes
 - **No competitor images.** Ever.
 - **No generic "braid" imagery** that misrepresents her actual work.
 
-This is why the gallery is small and why the service cards are typographic rather than a grid of empty image wells. A short honest gallery beats a padded dishonest one.
+This is why the service cards are typographic rather than a grid of empty image
+wells: there is no photograph of most of the 47 styles, and a stock braid photo
+would misrepresent her work. A short honest gallery beats a padded dishonest one.
+
+Four of the six now carry a `category` and `serviceSlug`, which is what turns on
+their filter chips and links each photo to a bookable style. More photos of
+specific installs — shot from behind and above, so the parting reads — remain the
+highest-value thing Kristian can supply.
 
 ## Why Instagram can't just be scraped
 

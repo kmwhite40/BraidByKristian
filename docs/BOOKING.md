@@ -50,6 +50,27 @@ The real sequence, per Kristian's published policy:
 
 `/book` says this out loud so nobody assumes they are done at step 1.
 
+## Where the Book buttons go
+
+`booking.mode` in `lib/content/site.ts` is the one switch. Every CTA — header,
+hero, footer, service cards, sticky bar — reads it through `BookButton`, so they
+cannot drift apart.
+
+| mode | Book CTAs go to |
+| --- | --- |
+| `'external'` (current) | Kristian's Acuity scheduler, new tab. A service CTA deep-links that exact style via `?appointmentType=<id>`. |
+| `'embed'` | `/book` on this site, which gates on the prep acknowledgement then embeds the same scheduler. |
+
+**Trade-off.** `'external'` is the shortest path to the calendar, but it skips
+the prep gate — and those two requirements (clean dry hair, no oils) are where
+the $45 wash fee and the reschedules come from. `/book` still exists in either
+mode and is still linked from the policies and accessibility pages, so switching
+back is a one-word change.
+
+External links open in a new tab with `rel="noopener noreferrer"`. The scheduler
+is a different origin; without `noopener` the opened page gets a handle on ours
+via `window.opener`.
+
 ## The prep gate
 
 `/book` puts one acknowledgement in front of the calendar: clean dry hair, no oils, deposit is non-refundable.

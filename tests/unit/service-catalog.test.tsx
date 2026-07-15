@@ -16,14 +16,27 @@ describe('ServiceCard', () => {
 
     expect(screen.getByText('$155')).toBeInTheDocument()
     expect(screen.getByText('6 hr')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /book/i })).toHaveAttribute(
-      'href',
-      '/book?style=medium-knotless',
-    )
     expect(screen.getByRole('link', { name: /details/i })).toHaveAttribute(
       'href',
       '/services/medium-knotless',
     )
+  })
+
+  it('books straight into the scheduler, deep-linked to this exact style', () => {
+    // booking.mode is 'external': Book CTAs go to Acuity, not to /book.
+    const s = getService('medium-knotless')!
+    render(<ServiceCard service={s} />)
+
+    const book = screen.getByRole('link', { name: /^book/i })
+    // The appointmentType is what preselects the style — a bare scheduler link
+    // would dump the client on the full 47-item menu.
+    expect(book).toHaveAttribute(
+      'href',
+      `https://braidsbykristian.as.me/schedule/b36fc416?appointmentType=${s.id}`,
+    )
+    // Cross-origin: without rel=noopener the opened page can reach window.opener.
+    expect(book).toHaveAttribute('target', '_blank')
+    expect(book).toHaveAttribute('rel', expect.stringContaining('noopener'))
   })
 
   it('says "Quoted" instead of "$0" for the freestyle service', () => {

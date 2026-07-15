@@ -48,29 +48,56 @@ test.describe('routes', () => {
   })
 })
 
+const SCHEDULER = 'https://braidsbykristian.as.me/schedule/b36fc416'
+
+/**
+ * `booking.mode` is 'external': every Book CTA goes straight to Kristian's
+ * Acuity scheduler rather than to /book. These assert the href rather than
+ * following it — clicking would navigate off-site to a live third party, which
+ * would make the suite slow, flaky and dependent on Acuity being up.
+ */
 test.describe('booking links', () => {
-  test('header book CTA reaches the booking page', async ({ page, isMobile }) => {
+  test('header book CTA points at the live scheduler', async ({ page, isMobile }) => {
     await page.goto('/')
     if (isMobile) {
       await page.getByRole('button', { name: /open menu/i }).click()
     }
-    await page.getByRole('link', { name: /book/i }).first().click()
-    await expect(page).toHaveURL(/\/book/)
-    await expect(page.getByRole('heading', { name: /save your seat/i })).toBeVisible()
+    const cta = page.getByRole('link', { name: /^book/i }).first()
+    await expect(cta).toHaveAttribute('href', new RegExp(SCHEDULER.replace(/\//g, '\\/')))
+    await expect(cta).toHaveAttribute('target', '_blank')
+    await expect(cta).toHaveAttribute('rel', /noopener/)
   })
 
-  test('a service card books that exact style', async ({ page }) => {
+  test('a service CTA deep-links the scheduler to that exact style', async ({ page }) => {
     await page.goto('/services/medium-knotless')
-    await page.getByRole('link', { name: /book this style/i }).click()
-    await expect(page).toHaveURL(/\/book\?style=medium-knotless/)
-    await expect(page.getByText('Medium Knotless').first()).toBeVisible()
+    // 75443741 is Medium Knotless's Acuity appointmentType. Without it the
+    // client lands on the full 47-item menu.
+    await expect(page.getByRole('link', { name: /book this style/i })).toHaveAttribute(
+      'href',
+      `${SCHEDULER}?appointmentType=75443741`,
+    )
   })
 
-  test('every service page exposes a booking link', async ({ page }) => {
-    for (const slug of ['freestyle', 'braid-removal', 'natural-hair-box-braids']) {
+  test('every service page books its own appointmentType', async ({ page }) => {
+    const cases: [string, number][] = [
+      ['freestyle', 75584906],
+      ['braid-removal', 81228932],
+      ['natural-hair-box-braids', 75445496],
+    ]
+    for (const [slug, id] of cases) {
       await page.goto(`/services/${slug}`)
-      await expect(page.getByRole('link', { name: /book this style/i })).toBeVisible()
+      await expect(
+        page.getByRole('link', { name: /book this style/i }),
+        slug,
+      ).toHaveAttribute('href', `${SCHEDULER}?appointmentType=${id}`)
     }
+  })
+
+  test('/book still works as a fallback and is still reachable', async ({ page }) => {
+    // The prep-gated embed remains — the policies and accessibility pages link
+    // to it, and flipping booking.mode back to 'embed' must keep working.
+    await page.goto('/book')
+    await expect(page.getByRole('heading', { name: /save your seat/i })).toBeVisible()
   })
 })
 

@@ -27,7 +27,7 @@ No environment variables are needed to run the site. See [`.env.example`](.env.e
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint |
 | `pnpm test` | Vitest unit + component tests |
-| `pnpm test:e2e` | Playwright, across 6 viewports (builds first) |
+| `pnpm test:e2e` | Playwright — 6 viewports, Chromium + WebKit (builds first) |
 | `pnpm verify` | typecheck → lint → test → build |
 
 ---
@@ -51,6 +51,7 @@ Almost everything a non-developer needs is in **[`lib/content/site.ts`](lib/cont
 | Phone, address, hours, socials | `lib/content/site.ts` |
 | Deposit / late fee / cancellation window | `lib/content/site.ts` → `deposit`, `fees` |
 | The announcement bar (or turn it off) | `lib/content/site.ts` → `announcement.enabled` |
+| Where Book buttons go (Acuity direct vs the on-site embed) | `lib/content/site.ts` → `booking.mode` |
 | Homepage featured styles | `lib/content/index.ts` → `featuredServiceSlugs` |
 | Policies + preparation | `lib/content/policies.ts` |
 | FAQs | `lib/content/faq.ts` |
@@ -103,7 +104,7 @@ lib/
   validation/             Zod schemas shared by client and server
   hooks/                  useSyncExternalStore-based storage + scroll
 public/images/            Real photography (see docs/IMAGES.md)
-tests/unit/               88 Vitest tests
+tests/unit/               89 Vitest tests
 tests/e2e/                Playwright, 6 viewports
 ```
 
@@ -115,7 +116,7 @@ tests/e2e/                Playwright, 6 viewports
 
 These are tracked as `[NEEDS-INPUT]` in `lib/content/site.ts`:
 
-1. **Photography** — only 4 photos exist, cropped from her booking-site flyers. This is the biggest gap. See [docs/IMAGES.md](docs/IMAGES.md).
+1. **Photo watermarks** — all six photographs carry a *K.Nett 2025 Images* watermark, which sits in frame on the hero. Clean licensed web exports should replace them before launch. The watermark is the photographer's copyright mark and must not be edited out. See [docs/IMAGES.md](docs/IMAGES.md).
 2. **A conflict to resolve** — her bio says she serves *Fate, TX*, but her address and site header both say *Garland, TX*. The site uses Garland (it has a street address behind it). If Fate is right, fix `serviceArea` and `address` together.
 3. **Email address** — none is published, so the contact form logs instead of delivering and the "email us" link stays hidden.
 4. **TikTok** — no profile is published; the icon does not render.

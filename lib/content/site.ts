@@ -164,6 +164,25 @@ export const booking = {
   scheduleUrl: 'https://braidsbykristian.as.me/schedule/b36fc416',
   ownerId: '35089723',
   ownerKey: 'b36fc416',
+
+  /**
+   * Where every "Book" CTA sends people. One switch — the header, hero, footer,
+   * service cards, sticky bar and every other CTA read it.
+   *
+   * 'external' — straight to Kristian's Acuity scheduler in a new tab. A service
+   *   CTA still deep-links to that exact style via ?appointmentType=<id>.
+   *
+   * 'embed' — to /book on this site, which restates the two hard requirements
+   *   (clean dry hair, no oils) behind one checkbox before showing the same
+   *   scheduler in-page.
+   *
+   * TRADE-OFF, so a future reader knows what changed: 'external' is the faster
+   * path to the calendar, but it skips the prep gate. Those two requirements are
+   * where the $45 wash fee and the reschedules come from. /book still exists
+   * either way and is still linked from the policies and accessibility pages, so
+   * flipping this back is a one-word change.
+   */
+  mode: 'external' as 'external' | 'embed',
 } as const
 
 export type Site = typeof site

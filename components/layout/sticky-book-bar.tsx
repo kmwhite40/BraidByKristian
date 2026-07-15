@@ -1,8 +1,7 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { track } from '@/lib/analytics'
+import { BookButton } from '@/components/ui/book-button'
 import { useScrollPast } from '@/lib/hooks/use-scroll-past'
 import { cn } from '@/lib/utils'
 
@@ -41,15 +40,15 @@ export function StickyBookBar() {
           <span className="block font-medium text-canvas">Ready to book?</span>
           $25 deposit holds your spot
         </p>
-        <Link
-          href="/book"
-          onClick={() =>
-            track({ name: 'booking_cta_click', props: { placement: 'sticky-mobile' } })
-          }
-          className="inline-flex h-11 shrink-0 items-center bg-canvas px-5 text-xs font-medium tracking-[0.14em] text-ink uppercase"
+        {/* Via BookButton so it follows `booking.mode` with every other CTA. */}
+        <BookButton
+          placement="sticky-mobile"
+          variant="inverse"
+          size="sm"
+          className="h-11 shrink-0 px-5 text-xs"
         >
           Book now
-        </Link>
+        </BookButton>
       </div>
     </div>
   )

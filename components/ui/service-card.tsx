@@ -3,6 +3,7 @@ import { ArrowUpRight, Clock } from 'lucide-react'
 import { getCategoryName, SIZE_LABELS, type Service } from '@/lib/content'
 import { cn, formatDuration, formatPrice } from '@/lib/utils'
 import { HairNotice } from './hair-notice'
+import { BookButton } from './book-button'
 import { FavoriteButton } from '@/components/favorite-button'
 
 /**
@@ -94,14 +95,18 @@ export function ServiceCard({
 
       {/* Layered above the stretched link so both remain clickable. */}
       <div className="relative z-10 mt-5 flex items-center gap-4 pb-5">
-        <Link
-          href={`/book?style=${encodeURIComponent(service.slug)}`}
-          className="inline-flex h-9 items-center gap-1.5 bg-espresso-600 px-4 text-[0.6875rem] font-medium tracking-[0.14em] text-canvas uppercase transition-colors hover:bg-espresso-800"
+        {/* Routes via BookButton so it obeys `booking.mode` like every other
+            CTA — a hardcoded /book link here would quietly diverge. */}
+        <BookButton
+          service={service.slug}
+          placement="service-card"
+          size="sm"
+          className="h-9 gap-1.5 px-4 text-[0.6875rem]"
         >
           Book
           <ArrowUpRight aria-hidden="true" className="size-3.5 stroke-[1.5]" />
           <span className="sr-only">{service.name}</span>
-        </Link>
+        </BookButton>
         <Link
           href={`/services/${service.slug}`}
           className="text-[0.6875rem] font-medium tracking-[0.14em] text-ink-muted uppercase underline decoration-clay-500 underline-offset-4 transition-colors hover:text-ink"
