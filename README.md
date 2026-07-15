@@ -117,7 +117,7 @@ tests/e2e/                Playwright, 6 viewports
 These are tracked as `[NEEDS-INPUT]` in `lib/content/site.ts`:
 
 1. **Photo watermarks** — all six photographs carry a *K.Nett 2025 Images* watermark, which sits in frame on the hero. Clean licensed web exports should replace them before launch. The watermark is the photographer's copyright mark and must not be edited out. See [docs/IMAGES.md](docs/IMAGES.md).
-2. **A conflict to resolve** — her bio says she serves *Fate, TX*, but her address and site header both say *Garland, TX*. The site uses Garland (it has a street address behind it). If Fate is right, fix `serviceArea` and `address` together.
+2. **A current bio** — her published bio still names *Fate, TX*, which she has confirmed is out of date (she works out of Garland). Rather than doctor a quote, the verbatim bio was removed from the About page. If she writes a fresh one, add it back to `lib/content/about.ts`.
 3. **Email address** — none is published, so the contact form logs instead of delivering and the "email us" link stays hidden.
 4. **TikTok** — no profile is published; the icon does not render.
 5. **Domain** — `NEXT_PUBLIC_SITE_URL` is a placeholder.

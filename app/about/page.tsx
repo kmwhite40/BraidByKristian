@@ -92,17 +92,11 @@ export default function AboutPage() {
                   />
                 </div>
 
-                {/* Her own words, quoted rather than paraphrased. */}
-                <figure className="mt-8 border-t border-rule pt-6">
-                  <blockquote>
-                    <p className="text-sm leading-relaxed text-ink-muted italic">
-                      “{about.verbatimBio}”
-                    </p>
-                  </blockquote>
-                  <figcaption className="mt-3 text-xs text-ink-subtle">
-                    Kristian, in her own words — from her booking site.
-                  </figcaption>
-                </figure>
+                {/* The verbatim bio quote was removed with `about.verbatimBio`
+                    — see lib/content/about.ts. Her published bio still names
+                    Fate, TX, which is out of date, and doctoring a quote to fix
+                    it would be worse than dropping it. Add it back here as a
+                    <blockquote> if she supplies a current one. */}
               </div>
             </aside>
           </div>

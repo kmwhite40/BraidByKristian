@@ -46,7 +46,7 @@ If email is on the same domain, do not disturb existing `MX`/`TXT`. Resend's SPF
 - [ ] `/sitemap.xml` lists 58 URLs on the real domain
 - [ ] `/robots.txt` allows crawling
 - [ ] Submit the sitemap in Google Search Console
-- [ ] Confirm the **Fate vs Garland** conflict with Kristian (see README)
+- [ ] Replace the photography with clean, unwatermarked exports from K.Nett (see IMAGES.md)
 - [ ] Replace the flyer-cropped photography with real photos (see IMAGES.md)
 - [ ] Lighthouse on `/` and `/services/medium-knotless`
 - [ ] Check the announcement bar is still in season

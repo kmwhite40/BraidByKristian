@@ -61,13 +61,12 @@ export const site = {
       country: 'US',
     },
     /**
-     * [VERIFIED] The flyer header reads "Based in Garland, TX".
+     * [VERIFIED] Garland — confirmed by Kristian, and backed by the street
+     * address above and the "Based in Garland, TX" line on her booking site.
      *
-     * ⚠ CONFLICT TO CONFIRM: the "Meet Your Hair Stylist" flyer says
-     * "serving clients in Fate, TX and the surrounding areas", but the address
-     * block and the site header both say Garland. Garland is used throughout
-     * because it is backed by a concrete street address. If Fate is current,
-     * change this and `address` together. See docs/CONTENT.md.
+     * Her older published bio mentions Fate, TX; that is out of date and is not
+     * used anywhere. `tests/unit/content.test.ts` asserts Fate never reappears
+     * in customer-facing content.
      */
     serviceArea: 'Garland, TX and the surrounding Dallas area',
     timezone: 'America/Chicago',

@@ -1,12 +1,11 @@
 import { site } from './site'
 
 /**
- * About copy. Kristian's own words are preserved in `verbatimBio` — it is the
- * bio from her "Meet Your Hair Stylist" flyer, transcribed exactly.
+ * About copy.
  *
  * `intro` and `philosophy` are written for the web, but every claim in them is
- * traceable to something she has published:
- *   "part-time braider"        → her bio
+ * traceable to something Kristian has published:
+ *   "part-time braider"        → her booking-site bio
  *   "salon suite"              → her flyer: "welcome you into my luxury salon suite"
  *   "safest ... approach"      → her prep flyer, on hair history
  *   "confident, cared for"     → her bio
@@ -14,12 +13,16 @@ import { site } from './site'
  *
  * Nothing about years of experience, training, certifications, client counts or
  * awards appears here, because none of it is published anywhere we can verify.
+ *
+ * NOTE — the removed `verbatimBio`
+ * The About page used to quote the bio from her "Meet Your Hair Stylist" flyer
+ * word for word. That bio says she serves "Fate, TX", which Kristian has since
+ * confirmed is out of date — she works out of Garland. The quote is gone rather
+ * than edited: rewriting someone's words and still presenting them as "in her
+ * own words" would put a sentence in her mouth she never said. If she supplies
+ * a current bio, add it back as a real quote.
  */
 export const about = {
-  /** [VERIFIED] Verbatim from the "Meet Your Hair Stylist" flyer. */
-  verbatimBio:
-    "Hi! My name is Kristian, and I'm a part-time braider proudly serving clients in Fate, TX and the surrounding areas. Creating beauty through braiding is something I truly enjoy. My goal is to make sure every client leaves feeling confident, cared for, and satisfied with their style. Thank you for stopping by my booking page, and please feel free to contact me with any questions, concerns, or special requests. I look forward to working with you!",
-
   eyebrow: 'Meet your braider',
   heading: 'Hi, I’m Kristian',
 

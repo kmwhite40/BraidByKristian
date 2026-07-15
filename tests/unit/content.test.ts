@@ -15,6 +15,7 @@ import {
   faqs,
   testimonials,
   galleryItems,
+  about,
 } from '@/lib/content'
 
 /**
@@ -209,6 +210,25 @@ describe('business facts match the booking site', () => {
     expect(site.contact.address.city).toBe('Garland')
     expect(site.contact.address.region).toBe('TX')
     expect(site.contact.address.postalCode).toBe('75044')
+  })
+
+  it('never says Fate — the location is Garland, confirmed by Kristian', () => {
+    // Her older published bio names Fate, TX. It is out of date. This sweeps
+    // every string the site can render so a future edit cannot quietly
+    // reintroduce it.
+    const surfaces = [
+      JSON.stringify(site),
+      JSON.stringify(about),
+      JSON.stringify(policies),
+      JSON.stringify(preparation),
+      JSON.stringify(faqs),
+      JSON.stringify(testimonials),
+      JSON.stringify(galleryItems),
+      JSON.stringify(services),
+    ].join(' ')
+
+    expect(surfaces).not.toMatch(/\bFate\b/i)
+    expect(surfaces).toMatch(/Garland/)
   })
 
   it('leaves unverified contact channels null rather than inventing them', () => {
