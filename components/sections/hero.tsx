@@ -115,20 +115,24 @@ export function Hero() {
           <div className="lg:col-span-6">
             <Reveal delay={0.1} distance={24}>
               <figure className="relative">
-                <div className="arch-sm relative aspect-[780/892] overflow-hidden bg-clay-200">
+                {/* The photograph's own aspect ratio (800x538). Matching it
+                    exactly means object-cover crops nothing — the earlier
+                    780x892 box was a crop of the flyer, which had black mask
+                    bars over the two outer clients. */}
+                <div className="arch-sm relative aspect-[800/538] overflow-hidden bg-clay-200">
                   <Image
                     src="/images/studio-kristian-and-clients.jpg"
-                    alt="Kristian seated with two of her clients in the salon suite. Both clients wear long braided styles with curled ends."
-                    width={780}
-                    height={892}
+                    alt="Kristian seated on a cream couch with four clients around her, everyone in denim. The styles range from long knotless braids to bohemian braids with curls left out and a braided updo."
+                    width={800}
+                    height={538}
                     priority
                     fetchPriority="high"
                     sizes="(min-width: 1024px) 46vw, 100vw"
-                    className="size-full object-cover object-top"
+                    className="size-full object-cover"
                   />
                 </div>
                 <figcaption className="mt-3 text-xs text-ink-subtle">
-                  Kristian (seated) with clients.
+                  Kristian (centre) with clients.
                 </figcaption>
               </figure>
             </Reveal>

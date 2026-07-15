@@ -81,12 +81,12 @@ export default function AboutPage() {
 
             <aside className="lg:col-span-5">
               <div className="lg:sticky lg:top-28">
-                <div className="arch-sm relative aspect-[298/504] overflow-hidden bg-clay-200">
+                <div className="arch-sm relative aspect-[569/799] overflow-hidden bg-clay-200">
                   <Image
                     src="/images/kristian-portrait.jpg"
-                    alt="Portrait of Kristian, the braider behind Braids by Kristian."
-                    width={298}
-                    height={504}
+                    alt="Portrait of Kristian, the braider behind Braids by Kristian, smiling in a pink jacket with feathered cuffs."
+                    width={569}
+                    height={799}
                     sizes="(min-width: 1024px) 38vw, 90vw"
                     className="size-full object-cover"
                   />

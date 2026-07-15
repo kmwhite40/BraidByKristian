@@ -48,3 +48,6 @@ yarn-error.log*
 
 # local visual-check harness
 /shot.mjs
+
+# staging folder for photo drops — the optimised copies live in public/images
+/incoming

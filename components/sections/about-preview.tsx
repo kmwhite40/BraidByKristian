@@ -13,12 +13,12 @@ export function AboutPreview() {
           {/* Portrait in the arch — the motif from Kristian's own flyer, where
               this same photograph sits inside one. */}
           <Reveal className="lg:col-span-5">
-            <div className="arch-sm relative mx-auto aspect-[298/504] w-full max-w-sm overflow-hidden bg-clay-300">
+            <div className="arch-sm relative mx-auto aspect-[569/799] w-full max-w-sm overflow-hidden bg-clay-300">
               <Image
                 src="/images/kristian-portrait.jpg"
-                alt="Kristian, the braider behind Braids by Kristian."
-                width={298}
-                height={504}
+                alt="Portrait of Kristian, the braider behind Braids by Kristian, smiling in a pink jacket with feathered cuffs."
+                width={569}
+                height={799}
                 sizes="(min-width: 1024px) 30vw, (min-width: 640px) 60vw, 90vw"
                 className="size-full object-cover"
               />
