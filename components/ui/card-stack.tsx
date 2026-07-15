@@ -49,8 +49,17 @@ export type CardStackProps = {
   initialIndex?: number
   /** How many cards show either side of the active one. */
   maxVisible?: number
+  /**
+   * Nominal width. Cards do NOT all use it — each one takes its own
+   * photograph's aspect ratio (see `cardWidthFor`). This value only drives the
+   * fan spacing and the swipe threshold, so the deck stays evenly spaced
+   * whatever mix of portraits and landscapes it holds.
+   */
   cardWidth?: number
+  /** Uniform card height. This is what makes the fan read as one deck. */
   cardHeight?: number
+  /** Stops a landscape photo from dominating the deck. */
+  maxCardWidth?: number
   /** 0..0.8 — higher packs the fan tighter. */
   overlap?: number
   /** Total fan angle in degrees. */
@@ -80,6 +89,7 @@ export function CardStack({
   maxVisible = 5,
   cardWidth = 380,
   cardHeight = 480,
+  maxCardWidth = 440,
   overlap = 0.52,
   spreadDeg = 26,
   loop = true,
@@ -94,6 +104,23 @@ export function CardStack({
   const maxOffset = Math.max(0, Math.floor(maxVisible / 2))
   const cardSpacing = Math.max(10, Math.round(cardWidth * (1 - overlap)))
   const stepDeg = maxOffset > 0 ? spreadDeg / maxOffset : 0
+
+  const CAPTION_H = 52
+  const imageAreaHeight = cardHeight - CAPTION_H
+
+  /**
+   * Each card takes its own photograph's width at the shared height, so the
+   * image is shown whole with no crop AND no letterbox mat.
+   *
+   * The alternative — one fixed card shape — forced a choice between cropping
+   * (which cut 41% off the portraits) and matting (which left the deck mostly
+   * empty backdrop), because these sources range from 0.47 to 0.87. Varying
+   * widths at a constant height is what a real fan of prints looks like anyway.
+   */
+  const cardWidthFor = (item: CardStackItem) =>
+    Math.round(
+      Math.min(maxCardWidth, (imageAreaHeight * item.width) / item.height),
+    )
 
   const go = React.useCallback(
     (delta: number) => {
@@ -160,7 +187,9 @@ export function CardStack({
                   isActive ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer',
                 )}
                 style={{
-                  width: cardWidth,
+                  // Per-photo width at the shared height — the card is the
+                  // print, so nothing is cropped and nothing is matted.
+                  width: cardWidthFor(item),
                   height: cardHeight,
                   zIndex: 100 - abs,
                   // The brand arch. Kept shallower than the flyers' full
@@ -202,28 +231,46 @@ export function CardStack({
                     }
                   : {})}
               >
-                <Image
-                  src={item.src}
-                  alt={isActive ? item.alt : ''}
-                  width={item.width}
-                  height={item.height}
-                  draggable={false}
-                  sizes={`${cardWidth}px`}
-                  priority={abs <= 1}
-                  className="pointer-events-none size-full object-cover object-top"
-                />
-                {/* Caption sits on a solid plate, not a gradient scrim — the
-                    scrim is the tell, and solid keeps the text contrast real. */}
-                {isActive ? (
-                  <div className="absolute inset-x-0 bottom-0 bg-canvas/94 px-4 py-3">
-                    <p className="truncate text-sm font-medium text-ink">{item.title}</p>
-                    {item.description ? (
-                      <p className="mt-0.5 truncate text-xs text-ink-subtle">
-                        {item.description}
-                      </p>
-                    ) : null}
+                {/* MATTED, NOT CROPPED.
+                    `object-contain` shows each photograph whole. `object-cover`
+                    was throwing away 41% of the height on the portraits, and
+                    because the subjects sit mid-frame (not at the top), an
+                    `object-top` crop kept the empty backdrop and cut the face
+                    off at the chin.
+                    Letterboxing onto a clay mat also means a deck of
+                    mixed-aspect photos stays uniform without anyone hand-tuning
+                    a focal point per image — drop a new photo in and it fits. */}
+                <div className="flex h-full flex-col">
+                  <div className="min-h-0 flex-1 bg-clay-100">
+                    <Image
+                      src={item.src}
+                      alt={isActive ? item.alt : ''}
+                      width={item.width}
+                      height={item.height}
+                      draggable={false}
+                      sizes={`${maxCardWidth}px`}
+                      priority={abs <= 1}
+                      // The card is already this photo's aspect ratio, so
+                      // object-cover fills it exactly and crops nothing. It
+                      // stays as `cover` only to absorb sub-pixel rounding in
+                      // cardWidthFor.
+                      className="pointer-events-none size-full object-cover"
+                    />
                   </div>
-                ) : null}
+                  {/* Caption sits below the photo on a solid plate, so it can
+                      never cover the subject. No gradient scrim — the scrim is
+                      the tell, and solid keeps the text contrast real. */}
+                  {isActive ? (
+                    <div className="shrink-0 border-t border-rule bg-canvas px-4 py-3">
+                      <p className="truncate text-sm font-medium text-ink">{item.title}</p>
+                      {item.description ? (
+                        <p className="mt-0.5 truncate text-xs text-ink-subtle">
+                          {item.description}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
               </motion.div>
             )
           })}

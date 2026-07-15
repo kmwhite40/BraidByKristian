@@ -29,8 +29,12 @@ export function FeaturedStack({ items }: { items: GalleryItem[] }) {
     <CardStack
       items={cards}
       label="Featured work by Kristian"
-      cardWidth={340}
-      cardHeight={430}
+      // Portrait-leaning card (0.6), sized to the photographs rather than the
+      // other way round: the sources run 0.47–0.87, so a squarer card would mat
+      // the tall portraits heavily. Extra height leaves room for the caption
+      // plate without eating into the image.
+      cardWidth={300}
+      cardHeight={500}
       maxVisible={5}
       onChangeIndex={(_i, item) => track({ name: 'gallery_open', props: { item: item.id } })}
     />
