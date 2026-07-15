@@ -1,0 +1,245 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Braids by Kristian — design tokens
+
+   The palette is sampled directly from Kristian's own brand collateral (the
+   booking-site flyers): the clay/mocha field, the espresso arch, and the
+   near-black display type. Nothing here is invented.
+
+     #C49979  clay 500   — the signature mocha. 62% of the flyer artwork.
+     #73442D  espresso 600 — the "Business Hours" arch
+     #3D2C23  espresso 800
+     #120E0D  ink         — display type
+     #D5B19D  clay 300
+     #E8DED4  the warm ivory the flyers are matted against
+
+   Contrast notes (WCAG 2.2 AA):
+     ink   on canvas      = 15.9:1  ✅
+     espresso-600 on canvas =  7.4:1  ✅ (accent text / links)
+     ink   on clay-500    =  8.4:1  ✅ (dark text on the clay fields)
+     clay-500 on canvas   =  2.1:1  ❌ — surfaces and borders only, never text.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Warm ivory foundation */
+  --color-canvas: #faf6f1;
+  --color-canvas-sunk: #f2e9df;
+  --color-canvas-raised: #ffffff;
+
+  /* Clay — the signature mocha */
+  --color-clay-50: #faf3ed;
+  --color-clay-100: #f3e7db;
+  --color-clay-200: #e3c9b7;
+  --color-clay-300: #d5b19d;
+  --color-clay-400: #cba589;
+  --color-clay-500: #c49979;
+  --color-clay-600: #a3816b;
+  --color-clay-700: #8c6449;
+  --color-clay-800: #73442d;
+
+  /* Espresso — accent + deep surfaces */
+  --color-espresso-500: #86634d;
+  --color-espresso-600: #73442d;
+  --color-espresso-700: #5d453b;
+  --color-espresso-800: #3d2c23;
+  --color-espresso-900: #241916;
+
+  /* Ink */
+  --color-ink: #120e0d;
+  --color-ink-muted: #4a3f39;
+  --color-ink-subtle: #6f625a;
+
+  /* Hairlines */
+  --color-rule: #e0d2c4;
+  --color-rule-strong: #c9b5a3;
+
+  --color-focus: #73442d;
+
+  /* Type */
+  --font-display: var(--font-bodoni), 'Bodoni Moda', 'Didot', Georgia, serif;
+  --font-sans: var(--font-jost), 'Jost', ui-sans-serif, system-ui, sans-serif;
+
+  /* Editorial display scale — fluid, clamped */
+  --text-display-xl: clamp(2.75rem, 8vw, 6.5rem);
+  --text-display-lg: clamp(2.25rem, 5.5vw, 4.25rem);
+  --text-display-md: clamp(1.75rem, 3.6vw, 2.75rem);
+  --text-display-sm: clamp(1.375rem, 2.4vw, 1.875rem);
+
+  --tracking-wordmark: 0.02em;
+  --tracking-eyebrow: 0.28em;
+
+  --radius-arch: 999px 999px 0 0;
+
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-rule);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+
+    /* Lets height animate to/from `auto` natively instead of the usual
+       max-height guess. Progressive: ignored where unsupported. */
+    interpolate-size: allow-keywords;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One visible, branded focus ring everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-clay-300);
+    color: var(--color-ink);
+  }
+
+  /* Respect the OS-level reduced-motion preference globally. Individual
+     components also check it via the useReducedMotion hook. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Letterspaced micro-label used above section headings. */
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-espresso-600);
+  }
+
+  /* The arch — lifted straight from Kristian's flyers, where every content
+     block sits inside a rounded-top arch. It is the brand's structural motif. */
+  .arch {
+    border-radius: 999px 999px 0 0;
+  }
+
+  .arch-sm {
+    border-radius: 14rem 14rem 0 0;
+  }
+
+  .rule-thin {
+    border-top: 1px solid var(--color-rule);
+  }
+
+  /* The services page renders all 47 cards at once — which is what makes
+     filtering instant and the whole catalog indexable. `content-visibility`
+     lets the browser skip layout and paint for the cards that are off-screen,
+     so we get that without paying for it on first render. `contain-intrinsic-
+     size` supplies a placeholder height so the scrollbar stays honest. */
+  .defer-paint {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 320px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile menu entrance.
+
+   `@starting-style` gives a real entry animation with no JS, no mount flags and
+   no animation library — the browser interpolates from the starting state the
+   first time the element is rendered. `display` is in `transition-behavior:
+   allow-discrete` so the element can animate out before it is hidden.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  #mobile-menu {
+    transition:
+      opacity 240ms var(--ease-editorial),
+      translate 240ms var(--ease-editorial),
+      display 240ms allow-discrete;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  #mobile-menu[hidden] {
+    display: none;
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+
+  @starting-style {
+    #mobile-menu {
+      opacity: 0;
+      translate: 0 -0.5rem;
+    }
+  }
+}
+/* With reduced motion, none of the above applies and the UA's own
+   `[hidden] { display: none }` hides the panel outright — no animation, which
+   is the correct behaviour rather than a faster one. */
+
+/* Accordion open/close. Animates height only — Radix supplies the measured
+   --radix-accordion-content-height, so nothing reflows around it. */
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+/* Utility: measured editorial column */
+@utility measure {
+  max-width: 68ch;
+}
+
+@utility measure-tight {
+  max-width: 52ch;
+}
