@@ -81,7 +81,8 @@ Acuity is the source of truth. To change a price, change it in Acuity, then rege
 | [docs/CONTACT.md](docs/CONTACT.md) | Contact form + Resend setup |
 | [docs/ANALYTICS.md](docs/ANALYTICS.md) | Analytics adapter, event names, privacy |
 | [docs/SECURITY.md](docs/SECURITY.md) | CSP, rate limiting, and their known limits |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Vercel, DNS, launch checklist |
+| [docs/HOSTINGER.md](docs/HOSTINGER.md) | **Deploying to Hostinger** — which plan, domain, DNS, env vars |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Deploying to Vercel (alternative), DNS, launch checklist |
 | [docs/DESIGN.md](docs/DESIGN.md) | The design system and why it looks the way it does |
 
 ---
@@ -109,6 +110,22 @@ tests/e2e/                Playwright, 6 viewports
 ```
 
 **Server-first.** Only genuinely interactive leaves are `'use client'`. The whole catalog is server-rendered, so it is complete and indexable before any JS runs.
+
+---
+
+## Deployment
+
+Target: **Hostinger, Business plan or above** — the cheaper Single/Premium plans do not run
+Node.js, and this is a Node app, not a static site. Hostinger imports from this GitHub repo and
+rebuilds on every push.
+
+**What needs buying:** Business web hosting (~$3.99/mo) + one domain (usually free for year one on
+an annual term). No VPS, no SSL purchase.
+
+`/api/contact` is the only dynamic route — the other 62 pages are prerendered. Full walkthrough,
+env vars and the launch checklist: **[docs/HOSTINGER.md](docs/HOSTINGER.md)**.
+
+Vercel also works with no changes: **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**.
 
 ---
 
