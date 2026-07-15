@@ -105,11 +105,15 @@ lib/
   validation/             Zod schemas shared by client and server
   hooks/                  useSyncExternalStore-based storage + scroll
 public/images/            Real photography (see docs/IMAGES.md)
-tests/unit/               89 Vitest tests
+tests/unit/               90 Vitest tests
 tests/e2e/                Playwright, 6 viewports
 ```
 
-**Server-first.** Only genuinely interactive leaves are `'use client'`. The whole catalog is server-rendered, so it is complete and indexable before any JS runs.
+**Server-first.** Only genuinely interactive leaves are `'use client'`. The whole catalog is
+server-rendered, so it is complete and indexable before any JS runs — an E2E test asserts the raw
+`/services` HTML contains all 47 book links, because this property is easy to lose silently:
+`useSearchParams` opts a component out of prerendering, and Next will quietly ship a Suspense
+fallback instead. Read query params with `lib/hooks/use-query-param.ts`.
 
 ---
 

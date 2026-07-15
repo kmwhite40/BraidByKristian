@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
 import { PageHeader } from '@/components/ui/page-header'
 import { Container, Section } from '@/components/ui/section'
 import { BookingClient } from '@/components/booking/booking-client'
@@ -31,9 +30,9 @@ export default function BookPage() {
 
       <Section className="py-12 sm:py-16">
         <Container>
-          <Suspense fallback={<div className="h-96" aria-hidden="true" />}>
-            <BookingClient />
-          </Suspense>
+          {/* No Suspense: BookingClient prerenders, so the prep requirements are
+              in the HTML rather than behind a client render. */}
+          <BookingClient />
         </Container>
       </Section>
 

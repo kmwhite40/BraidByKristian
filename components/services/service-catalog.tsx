@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useQueryParam } from '@/lib/hooks/use-query-param'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { ServiceCard } from '@/components/ui/service-card'
 import { getCategoryName, SIZE_LABELS } from '@/lib/content'
@@ -27,6 +27,11 @@ const SORTS: { value: Sort; label: string }[] = [
  * and indexable before any JS runs, and filtering is instant with no network.
  * At this size that is strictly better than paginating.
  *
+ * That property is fragile and was briefly lost: `useSearchParams` opts a
+ * component out of prerendering, so Next shipped only a Suspense fallback and
+ * the catalog was absent from the served HTML. Do not reintroduce it here —
+ * read query params via useQueryParam instead.
+ *
  * Filters offered are derived from the data — the size filter only lists sizes
  * that exist, and the hair filter only appears because some services genuinely
  * state who brings the hair. Nothing filters to a dead end silently: an empty
@@ -39,15 +44,31 @@ export function ServiceCatalog({
   services: Service[]
   categories: RawCategory[]
 }) {
-  const params = useSearchParams()
-  const initialCategory = params.get('category')
+  // Read after mount rather than via useSearchParams — see use-query-param.ts.
+  // useSearchParams would opt this component out of prerendering, and the whole
+  // catalog would vanish from the served HTML.
+  const categoryParam = useQueryParam('category')
 
   const [query, setQuery] = useState('')
-  const [category, setCategory] = useState<CategorySlug | 'all'>(
-    categories.some((c) => c.slug === initialCategory)
-      ? (initialCategory as CategorySlug)
-      : 'all',
-  )
+
+  /**
+   * Category is DERIVED, not synced.
+   *
+   * `?category=` supplies the initial value; once the visitor touches a chip,
+   * their choice wins and the param stops mattering. Deriving it means no
+   * effect, no cascading re-render, and no window where the two disagree.
+   * (Syncing param -> state in a useEffect also trips React's
+   * set-state-in-effect rule, and rightly so.)
+   *
+   * An unknown slug resolves to null and falls through to 'all', so a bad link
+   * shows the full catalog rather than an empty grid.
+   */
+  const paramCategory =
+    categoryParam && categories.some((c) => c.slug === categoryParam)
+      ? (categoryParam as CategorySlug)
+      : null
+  const [chosenCategory, setCategory] = useState<CategorySlug | 'all' | null>(null)
+  const category: CategorySlug | 'all' = chosenCategory ?? paramCategory ?? 'all'
   const [size, setSize] = useState<Size | 'all'>('all')
   const [hairFilter, setHairFilter] = useState<'all' | 'client' | 'not-applicable'>('all')
   const [sort, setSort] = useState<Sort>('featured')
@@ -271,6 +292,14 @@ export function ServiceCatalog({
           </button>
         ) : null}
       </div>
+
+      {/* Each ServiceCard titles itself with an <h3> — correct on the homepage
+          and the related-styles rail, where a section <h2> sits above them. On
+          /services the <h1> is the page title and nothing else intervenes, so
+          the outline jumped h1 -> h3 (axe `heading-order`). This heading is the
+          missing rung, and it doubles as a real navigation target for anyone
+          moving through the page by heading. */}
+      <h2 className="sr-only">Matching styles</h2>
 
       {/* Result count — announced to screen readers as filters change. */}
       <p

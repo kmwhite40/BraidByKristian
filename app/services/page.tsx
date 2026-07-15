@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
 import { PageHeader } from '@/components/ui/page-header'
 import { Container, Section } from '@/components/ui/section'
 import { ServiceCatalog } from '@/components/services/service-catalog'
@@ -11,7 +10,7 @@ import { formatPrice } from '@/lib/utils'
 
 export const metadata: Metadata = buildMetadata({
   title: 'All Services & Prices',
-  description: `Every style Kristian offers — ${catalogStats.serviceCount} services from ${formatPrice(catalogStats.lowestPrice)}. Knotless braids, bohemian, twists, locs, cornrows, Fulani and children's styles in ${site.contact.address.city}, ${site.contact.address.region}. Prices and appointment lengths listed.`,
+  description: `All ${catalogStats.serviceCount} styles from ${formatPrice(catalogStats.lowestPrice)} — knotless, bohemian, twists, locs and cornrows in ${site.contact.address.city}, ${site.contact.address.region}. Every price and sitting time listed.`,
   path: '/services',
 })
 
@@ -39,12 +38,10 @@ export default function ServicesPage() {
 
       <Section className="py-12 sm:py-16">
         <Container>
-          {/* useSearchParams needs a Suspense boundary to keep the route static. */}
-          <Suspense
-            fallback={<div className="h-24" aria-hidden="true" />}
-          >
-            <ServiceCatalog services={services} categories={categories} />
-          </Suspense>
+          {/* No Suspense: ServiceCatalog no longer calls useSearchParams, so it
+              prerenders with all 47 cards in the HTML. A fallback here would put
+              the catalog back behind a client render. */}
+          <ServiceCatalog services={services} categories={categories} />
         </Container>
       </Section>
 

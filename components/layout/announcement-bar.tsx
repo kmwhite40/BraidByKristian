@@ -29,7 +29,14 @@ export function AnnouncementBar() {
   if (!a.enabled || dismissed) return null
 
   return (
-    <div className="relative bg-espresso-800 text-canvas print:hidden">
+    // A landmark, not a bare div: this sits outside <header> and <main>, so
+    // without one its text belongs to no region and a screen reader user
+    // navigating by landmark skips straight past it. axe `region` flagged this
+    // on every route.
+    <aside
+      aria-label="Site announcement"
+      className="relative bg-espresso-800 text-canvas print:hidden"
+    >
       <div className="mx-auto flex max-w-[80rem] items-center justify-center gap-3 px-10 py-2.5 sm:px-12">
         <p className="text-center text-[0.8125rem] leading-snug">
           {a.message}{' '}
@@ -52,6 +59,6 @@ export function AnnouncementBar() {
           <span className="sr-only">Dismiss announcement</span>
         </button>
       </div>
-    </div>
+    </aside>
   )
 }

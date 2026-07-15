@@ -25,10 +25,21 @@ export function GalleryGrid({
   items,
   categories,
   className,
+  eagerCount = 0,
 }: {
   items: GalleryItem[]
   categories: CategorySlug[]
   className?: string
+  /**
+   * How many images to load eagerly. Default 0 — lazy.
+   *
+   * Only set this where the grid is genuinely above the fold. On the homepage
+   * the grid sits several sections down, and eager-loading its first two images
+   * put two extra `preload as=image` links in the <head> competing with the
+   * hero for the connection. The hero is the LCP element; nothing below it
+   * should be racing it.
+   */
+  eagerCount?: number
 }) {
   const [filter, setFilter] = useState<CategorySlug | 'all'>('all')
   const [open, setOpen] = useState<number | null>(null)
@@ -103,7 +114,7 @@ export function GalleryGrid({
                   alt={item.alt}
                   width={item.width}
                   height={item.height}
-                  loading={i < 2 ? 'eager' : 'lazy'}
+                  loading={i < eagerCount ? 'eager' : 'lazy'}
                   sizes="(min-width: 1024px) 25vw, 50vw"
                   className="size-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                 />

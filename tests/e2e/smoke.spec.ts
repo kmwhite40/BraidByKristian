@@ -40,6 +40,30 @@ test.describe('routes', () => {
     })
   }
 
+  /**
+   * REGRESSION GUARD — QA found the catalog missing from the served HTML.
+   *
+   * `useSearchParams` opts a component out of prerendering, so Next shipped only
+   * a 96px Suspense fallback: 0.151 CLS, nothing for a non-JS client, and no
+   * services in the HTML a crawler sees first. Asserts the raw response body,
+   * before any JS runs — a rendered-page assertion would pass either way and
+   * miss the whole bug.
+   */
+  test('/services ships the whole catalog in the HTML, not a Suspense fallback', async ({
+    request,
+  }) => {
+    const html = await (await request.get('/services')).text()
+    const deepLinks = html.match(/appointmentType=\d+/g) ?? []
+    expect(deepLinks.length, 'every service needs a book link in the HTML').toBe(47)
+    expect(html).toContain('47 styles')
+    expect(html).toContain('Medium Knotless')
+  })
+
+  test('/book ships the prep gate in the HTML', async ({ request }) => {
+    const html = await (await request.get('/book')).text()
+    expect(html).toContain('Two requirements, then the calendar')
+  })
+
   test('unknown route renders the custom 404', async ({ page }) => {
     const res = await page.goto('/definitely-not-a-page')
     expect(res?.status()).toBe(404)

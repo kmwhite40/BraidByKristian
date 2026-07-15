@@ -16,7 +16,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata: Metadata = buildMetadata({
   title: 'Frequently Asked Questions',
   description:
-    'Do I bring my own hair? How should my hair be prepared? Is a deposit required? Answers to the questions clients ask Kristian most, all drawn from her booking policies.',
+    'Do I bring my own hair? How should it be prepared? Is a deposit required? The questions clients ask Kristian most, answered from her booking policies.',
   path: '/faq',
 })
 

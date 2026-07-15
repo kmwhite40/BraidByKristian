@@ -37,7 +37,7 @@ export default function GalleryPage() {
 
           <div className="mt-16 border-t border-rule pt-12">
             <h2 className="sr-only">All photos</h2>
-            <GalleryGrid items={galleryItems} categories={galleryCategories} />
+            <GalleryGrid items={galleryItems} categories={galleryCategories} eagerCount={2} />
           </div>
 
           <div className="mt-16 border-t border-rule pt-12 text-center">

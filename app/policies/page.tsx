@@ -10,7 +10,7 @@ import { formatPrice } from '@/lib/utils'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Booking Policies & Preparation',
-  description: `Deposit, cancellation, late arrival and preparation policies for Braids by Kristian. ${formatPrice(site.deposit.amount)} non-refundable deposit, ${site.cancellationNoticeHours}-hour notice to cancel or reschedule, ${site.gracePeriodMinutes}-minute grace period.`,
+  description: `${formatPrice(site.deposit.amount)} non-refundable deposit, ${site.cancellationNoticeHours}-hour notice to cancel, ${site.gracePeriodMinutes}-minute grace period — plus how to prep your hair before your appointment.`,
   path: '/policies',
 })
 

@@ -1,8 +1,8 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useQueryParam } from '@/lib/hooks/use-query-param'
 import { AlertCircle, Check } from 'lucide-react'
 import { AcuityEmbed } from './acuity-embed'
 import { getService, preparation, site } from '@/lib/content'
@@ -21,8 +21,10 @@ import { formatDuration, formatPrice } from '@/lib/utils'
  * it is the last honest moment to say it before someone picks a date.
  */
 export function BookingClient() {
-  const params = useSearchParams()
-  const slug = params.get('style')
+  // Read after mount rather than via useSearchParams, which would opt this
+  // component out of prerendering and leave /book as a bare Suspense fallback.
+  // See lib/hooks/use-query-param.ts.
+  const slug = useQueryParam('style')
   const service = slug ? getService(slug) : undefined
   const [acknowledged, setAcknowledged] = useState(false)
 
