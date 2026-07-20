@@ -7,6 +7,7 @@ import {
   getService,
   getFeaturedServices,
   getRelatedServices,
+  getServicePhotos,
   getServicesByCategory,
   categoryFromPrice,
   site,
@@ -304,5 +305,61 @@ describe('faqs', () => {
   it('asks each question only once', () => {
     const qs = faqs.map((f) => f.question)
     expect(new Set(qs).size).toBe(qs.length)
+  })
+})
+
+describe('service photographs', () => {
+  it('marks a photo tagged with the service slug as an exact match', () => {
+    // knotless-01 carries serviceSlug 'medium-knotless'.
+    const service = getService('medium-knotless')!
+    const photos = getServicePhotos(service)
+    const exact = photos.filter((p) => p.exact)
+    expect(exact.length).toBeGreaterThan(0)
+    expect(exact.every((p) => p.serviceSlug === 'medium-knotless')).toBe(true)
+  })
+
+  it('puts exact matches before same-category ones', () => {
+    for (const service of services) {
+      const flags = getServicePhotos(service, 10).map((p) => p.exact)
+      const firstInexact = flags.indexOf(false)
+      if (firstInexact === -1) continue
+      expect(
+        flags.slice(firstInexact).every((f) => f === false),
+        `${service.slug}: an exact match appears after a family one`,
+      ).toBe(true)
+    }
+  })
+
+  /**
+   * The honesty rule, enforced. A photo may only be captioned as *this* style
+   * when it is tagged with this exact slug; anything selected merely because it
+   * shares a category has to be flagged so the UI labels it as the family. If
+   * this ever inverts, a size-M photo starts silently heading a size-S page.
+   */
+  it('never marks a photo exact unless its slug matches the service', () => {
+    for (const service of services) {
+      for (const photo of getServicePhotos(service, 10)) {
+        if (photo.exact) {
+          expect(photo.serviceSlug, `${service.slug} / ${photo.id}`).toBe(service.slug)
+        } else {
+          expect(photo.serviceSlug, `${service.slug} / ${photo.id}`).not.toBe(service.slug)
+        }
+      }
+    }
+  })
+
+  it('returns nothing rather than an unrelated photo', () => {
+    for (const service of services) {
+      for (const photo of getServicePhotos(service, 10)) {
+        const related = photo.serviceSlug === service.slug || photo.category === service.category
+        expect(related, `${service.slug} got unrelated photo ${photo.id}`).toBe(true)
+      }
+    }
+  })
+
+  it('respects the limit', () => {
+    for (const service of services) {
+      expect(getServicePhotos(service, 2).length).toBeLessThanOrEqual(2)
+    }
   })
 })

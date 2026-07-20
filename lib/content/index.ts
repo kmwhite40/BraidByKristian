@@ -1,9 +1,11 @@
 import { rawAddons, rawCategories, rawServices } from './services.data'
+import { galleryItems } from './gallery'
 import {
   rawAddonSchema,
   rawCategorySchema,
   rawServiceSchema,
   type CategorySlug,
+  type GalleryItem,
   type RawAddon,
   type RawService,
 } from './schema'
@@ -96,6 +98,40 @@ export function getRelatedServices(service: Service, limit = 3): Service[] {
       (a, b) => Math.abs(a.price - service.price) - Math.abs(b.price - service.price),
     )
   return [...sameCat, ...others].slice(0, limit)
+}
+
+/**
+ * A gallery photograph selected for a service page, carrying how sure we are
+ * that it depicts *that* service.
+ *
+ * The distinction is the whole point. A photo tagged with this exact slug is
+ * this style. A photo that only shares the category shows the family — the
+ * look, not necessarily the size or length someone is about to book. Captioning
+ * the second as though it were the first is precisely the kind of small,
+ * plausible overclaim this project does not make, so the flag travels with the
+ * photo and the UI is obliged to say which it is.
+ */
+export type ServicePhoto = GalleryItem & { exact: boolean }
+
+/**
+ * Photographs to show on a service page: exact matches first, then others from
+ * the same category.
+ *
+ * Returns `[]` for most services today — only 6 photos exist and 47 services do
+ * — and the section renders nothing rather than a placeholder. As photos are
+ * tagged in `gallery.ts` they appear here automatically; there is no per-service
+ * wiring to maintain.
+ */
+export function getServicePhotos(service: Service, limit = 3): ServicePhoto[] {
+  const exact = galleryItems
+    .filter((g) => g.serviceSlug === service.slug)
+    .map((g) => ({ ...g, exact: true }))
+
+  const family = galleryItems
+    .filter((g) => g.category === service.category && g.serviceSlug !== service.slug)
+    .map((g) => ({ ...g, exact: false }))
+
+  return [...exact, ...family].slice(0, limit)
 }
 
 /**

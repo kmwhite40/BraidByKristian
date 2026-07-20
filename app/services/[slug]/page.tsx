@@ -11,11 +11,13 @@ import { FaqSection } from '@/components/sections/faq-section'
 import { ShareButton } from '@/components/share-button'
 import { TrackServiceView } from '@/components/services/track-service-view'
 import { BreadcrumbJsonLd, ServiceJsonLd } from '@/components/structured-data'
+import { ServicePhotos } from '@/components/services/service-photos'
 import {
   getAddons,
   getCategoryName,
   getRelatedServices,
   getService,
+  getServicePhotos,
   services,
   faqs,
   preparation,
@@ -65,6 +67,7 @@ export default async function ServiceDetailPage({
 
   const addons = getAddons(service.addonIds)
   const related = getRelatedServices(service)
+  const photos = getServicePhotos(service)
   const categoryName = getCategoryName(service.category)
   const quoted = service.priceMode === 'quoted'
 
@@ -308,6 +311,9 @@ export default async function ServiceDetailPage({
               </div>
             </aside>
           </div>
+
+          {/* Renders nothing for services with no tagged photographs. */}
+          <ServicePhotos photos={photos} serviceName={service.name} />
         </Container>
       </Section>
 
