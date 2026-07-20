@@ -252,7 +252,7 @@ test.describe('seo', () => {
     const parsed = blocks.map((b) => JSON.parse(b))
     const biz = parsed.find((p) => p['@type'] === 'HairSalon')
     expect(biz).toBeTruthy()
-    expect(biz.telephone).toBe('+19723719731')
+    expect(biz.telephone).toBe('+14696531923')
     expect(biz.address.addressLocality).toBe('Garland')
     // Never claim a rating we cannot substantiate.
     expect(biz.aggregateRating).toBeUndefined()

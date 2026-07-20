@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Clock, Ruler, Scissors, Wallet } from 'lucide-react'
@@ -11,6 +12,7 @@ import { FaqSection } from '@/components/sections/faq-section'
 import { ShareButton } from '@/components/share-button'
 import { TrackServiceView } from '@/components/services/track-service-view'
 import { BreadcrumbJsonLd, ServiceJsonLd } from '@/components/structured-data'
+import { NextOpening } from '@/components/booking/next-opening'
 import { ServicePhotos } from '@/components/services/service-photos'
 import {
   getAddons,
@@ -278,6 +280,13 @@ export default async function ServiceDetailPage({
                   >
                     Check availability
                   </BookButton>
+
+                  {/* Renders nothing without ACUITY_* credentials, so the
+                      Suspense boundary resolves empty rather than reserving
+                      space for something that will not arrive. */}
+                  <Suspense fallback={null}>
+                    <NextOpening appointmentTypeId={service.id} />
+                  </Suspense>
 
                   <p className="mt-4 text-xs leading-relaxed text-ink-subtle">
                     Opens Kristian’s live calendar. Nothing is charged on this site — the

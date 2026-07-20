@@ -207,7 +207,7 @@ describe('business facts match the booking site', () => {
   })
 
   it('uses the verified phone number and location', () => {
-    expect(site.contact.phone).toBe('9723719731')
+    expect(site.contact.phone).toBe('4696531923')
     expect(site.contact.address.city).toBe('Garland')
     expect(site.contact.address.region).toBe('TX')
     expect(site.contact.address.postalCode).toBe('75044')

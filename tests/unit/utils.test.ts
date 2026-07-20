@@ -43,16 +43,16 @@ describe('formatPrice', () => {
 
 describe('formatPhone / telHref', () => {
   it('formats a 10-digit number', () => {
-    expect(formatPhone('9723719731')).toBe('(972) 371-9731')
+    expect(formatPhone('4696531923')).toBe('(469) 653-1923')
   })
   it('strips a leading country code', () => {
-    expect(formatPhone('19723719731')).toBe('(972) 371-9731')
+    expect(formatPhone('14696531923')).toBe('(469) 653-1923')
   })
   it('returns the input unchanged when it is not 10 digits', () => {
     expect(formatPhone('123')).toBe('123')
   })
   it('builds a dialable href', () => {
-    expect(telHref('9723719731')).toBe('tel:+19723719731')
+    expect(telHref('4696531923')).toBe('tel:+14696531923')
   })
 })
 

@@ -43,8 +43,17 @@ export const site = {
   /* Contact                                                             */
   /* ------------------------------------------------------------------ */
   contact: {
-    /** [VERIFIED] Acuity flyer — "972-371-9731" */
-    phone: '9723719731',
+    /**
+     * [VERIFIED — SUPPLIED BY THE BUSINESS, 2026-07-20]
+     *
+     * Her Acuity flyer still publishes the older 972-371-9731. This number was
+     * given directly by the business and supersedes it: the owner is a better
+     * source for her own contact details than a flyer she has not regenerated.
+     *
+     * If the flyer is ever re-scraped into the catalog, do not let it overwrite
+     * this back to the 972 number.
+     */
+    phone: '4696531923',
     /**
      * [VERIFIED — DELIBERATELY NOT PUBLISHED] Kristian does have a Google
      * Workspace mailbox on this domain, but `null` here is a decision, not a

@@ -26,7 +26,7 @@ export function formatPrice(amount: number): string {
   return `$${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
 }
 
-/** "(972) 371-9731" from "9723719731" */
+/** "(469) 653-1923" from "4696531923" */
 export function formatPhone(raw: string): string {
   const d = raw.replace(/\D/g, '').replace(/^1/, '')
   if (d.length !== 10) return raw
