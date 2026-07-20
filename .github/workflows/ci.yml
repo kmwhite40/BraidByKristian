@@ -19,7 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # `version` is pinned here rather than inherited from a `packageManager`
+      # field in package.json. That field made corepack refuse to run on
+      # Hostinger, whose corepack ships a different pnpm and will not switch
+      # versions. CI pins its own pnpm; the host uses whatever it ships.
       - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
 
       - uses: actions/setup-node@v4
         with:
@@ -50,6 +56,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -81,6 +89,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
