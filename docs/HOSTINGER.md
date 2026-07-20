@@ -29,30 +29,77 @@ Business plan is a few dollars more and keeps all of it. Take the Business plan.
 
 ## Deploying
 
-Hostinger imports straight from GitHub and rebuilds on every push — the repo is already at
-`github.com/kmwhite40/BraidByKristian`.
+Node apps live under hPanel → **Websites** (far-left icon strip) → **Web Apps**. They are *not*
+in the per-website dashboard sidebar, which is where you land by default and where you will not
+find them.
 
-1. hPanel → **Websites** → **Node.js Web App** → **Deploy Web App**
-2. **Import Git Repository** → authorise GitHub → pick `kmwhite40/BraidByKristian`
+1. **Web Apps** → **Get started**
+2. **Import Git repository** → authorise GitHub → pick `kmwhite40/BraidByKristian`
 3. Configure:
 
    | Setting | Value |
    | --- | --- |
-   | Framework | **Next.js** |
-   | Node version | **22.x** (or 24.x). **Not 18.x** — Next 16 needs ≥20.9. `.nvmrc` pins 22. |
+   | Framework | **Next.js** (auto-detected) |
+   | Node version | **22** |
    | Branch | `main` |
-   | Build command | `pnpm build` (or `npm run build` if pnpm is not offered) |
+   | Package manager | `pnpm` |
+   | Build command | `pnpm build` |
    | Start command | `pnpm start` |
-   | Entry file | *leave blank* — Next.js is a recognised framework, so it does not need one |
+   | Output directory | `.next` |
+   | Entry file | *leave blank* — Next.js is a recognised framework |
 
 4. Add environment variables (below)
 5. **Deploy**
 
 `next start` binds to whatever `PORT` Hostinger sets, so no port config is needed.
 
-> **pnpm vs npm.** The repo has a `pnpm-lock.yaml`. If Hostinger's build dropdown only offers
-> npm, the build still works — npm resolves from `package.json` and writes its own lockfile —
-> but you lose the exact pinned versions. Prefer pnpm if it is listed.
+**If "Connect with GitHub" is greyed out,** no GitHub account is linked to the Hostinger account
+yet. Link one — it is worth the five minutes. The fallback is **Upload your files** with a ZIP,
+which works but is a one-shot snapshot: every subsequent change means building and uploading a
+new ZIP by hand, where the Git connection redeploys on `git push`.
+
+Build a clean ZIP with `git archive`, never `zip -r .`:
+
+```bash
+git archive --format=zip -o ~/Desktop/app.zip HEAD
+```
+
+`git archive` emits exactly the tracked tree, so `node_modules`, `.next`, `.git` and everything
+in `.gitignore` are excluded by construction rather than by a list of `--exclude` flags you have
+to keep correct. The result is ~1.2 MB, well under the 50 MB limit.
+
+### Two build failures this project already hit
+
+Both died during dependency install, before any application code ran. Both are fixed in the
+repo — this is here so a future change does not reintroduce them.
+
+**1. Hostinger reads `engines`, not `.nvmrc`.**
+
+```
+ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING
+  at .../corepack/v1/pnpm/11.15.1/bin/pnpm.cjs:3:1
+Node.js v20.19.4
+```
+
+`engines.node` was `>=20.9.0`, so Hostinger chose Node 20 — regardless of `.nvmrc` saying 22 or
+the UI dropdown being set to 22. Node 20.19's bundled corepack cannot load pnpm 11. `engines` is
+now `>=22.0.0`; keep it that way, and keep it in step with `.nvmrc` and the CI workflow.
+
+**2. A pinned `packageManager` field breaks the host.**
+
+```
+This project is configured to use 11.9.0 of pnpm. Your current pnpm is v11.15.1
+Corepack invoked pnpm with this version, and pnpm does not switch versions
+when running under corepack.
+```
+
+`packageManager: "pnpm@11.9.0"` pinned an exact pnpm; Hostinger's corepack ships a different
+patch release and pnpm refuses to run rather than proceed on a version the project did not ask
+for. **The field has been removed** — the lockfile already provides reproducibility, and the pin
+only cost the ability to build anywhere whose toolchain differs slightly.
+
+CI read its pnpm version from that same field, so `.github/workflows/ci.yml` now pins `version:`
+explicitly in all three jobs. If you ever restore `packageManager`, expect the host to break.
 
 ---
 
@@ -141,6 +188,72 @@ Hostinger's DNS editor **before** flipping, not after:
 > spam folders, which is far harder to notice than an outright failure.
 
 After switching, confirm mail still flows **both ways** before considering it done.
+
+---
+
+## ⚠ Hostinger Email will silently delete Kristian's mail records
+
+**This happened on 2026-07-20 and took her email down.** It is the single most dangerous thing
+about hosting this domain here, and it is not something the UI warns you about.
+
+Kristian's mail is **Google Workspace**. Hostinger sells its own email service, and it
+auto-provisions itself on any domain you attach to hosting. When it does, it does not merge with
+what is already there — it **rewrites the DNS zone**, deleting the `MX`, `SPF`, `DKIM` and
+`DMARC` records that make Google Workspace work, and substituting its own.
+
+Observed twice in one afternoon:
+
+1. **On adding the domain to hosting** — injected `mx1/mx2.hostinger.com` alongside Google's MX,
+   plus a second `v=spf1` record. Two SPF records is a permerror: SPF then fails for *both*
+   senders. Caught before saving.
+2. **On attaching the domain to the Web App** — wiped all four records outright, leaving only
+   `A`, `AAAA` and two `CNAME`s. Mail was already failing when it was noticed.
+
+### The records that must survive
+
+Capture these **before** any domain operation, and check them **after**:
+
+| Type | Host | Value |
+| --- | --- | --- |
+| MX | `@` | `1 smtp.google.com` — this and nothing else |
+| TXT | `@` | `v=spf1 include:_spf.google.com ~all` — exactly one SPF record |
+| TXT | `google._domainkey` | `v=DKIM1; k=rsa; p=…` — 408 characters |
+| TXT | `_dmarc` | `v=DMARC1; p=none` |
+
+```bash
+dig +short MX braidsbykristian.com
+dig +short TXT braidsbykristian.com
+dig +short TXT google._domainkey.braidsbykristian.com
+dig +short TXT _dmarc.braidsbykristian.com
+```
+
+Run these against the authoritative server (`@pixel.dns-parking.com`) rather than a public
+resolver — caching will show you records that no longer exist for up to 48 hours, which is
+exactly how an outage stays invisible.
+
+### What to do
+
+- **Turn Hostinger Email off** for this domain (hPanel → Emails). There is no API for it. Until
+  it is off, every future domain operation can repeat this.
+- **Never add a second `MX` or `v=spf1` record.** One mail provider, one SPF.
+- **Test both directions after any DNS change** — send *to* and *from* her address. A missing
+  DKIM does not bounce; it quietly routes her outgoing mail to spam, which is far harder to
+  notice than an outright failure and much harder to undo reputationally.
+- Delete the `autodiscover` / `autoconfig` CNAMEs if they reappear. They point mail clients at
+  Hostinger during auto-setup instead of Google.
+
+---
+
+## Attaching the real domain to the Web App
+
+A Web App is created on a generated `*.hostingersite.com` address. Pointing the real domain at it
+is a Hostinger-side association — **no DNS changes are needed or wanted**.
+
+The domain must not already be hosted as its own site, or the attach fails with
+`[Hosting:9999] Domain is already hosted`. Free it first, then add it to the Web App as a
+domain/alias.
+
+Then re-check the email records above, because this is one of the operations that wipes them.
 
 ---
 
