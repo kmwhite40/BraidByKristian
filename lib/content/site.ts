@@ -23,8 +23,12 @@ export const site = {
   stylist: 'Kristian',
 
   /**
-   * [NEEDS-INPUT] The production domain. Update before launch — it is the base
-   * for canonical URLs, the sitemap, and Open Graph images.
+   * [VERIFIED] The production domain, registered 2026-07-15 through Squarespace
+   * Domains. Base for canonical URLs, the sitemap, and Open Graph images.
+   *
+   * The env var still wins so preview deploys can override it, but the fallback
+   * is now the real origin rather than a placeholder. NEXT_PUBLIC_* is baked in
+   * at build time — changing it on the host requires a redeploy.
    */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://braidsbykristian.com',
 
@@ -42,9 +46,18 @@ export const site = {
     /** [VERIFIED] Acuity flyer — "972-371-9731" */
     phone: '9723719731',
     /**
-     * [NEEDS-INPUT] No email address is published on the Acuity booking site.
-     * Until one is supplied the contact form posts to the API route and the
-     * "email us" link stays hidden. Set this and CONTACT_TO_EMAIL in .env.
+     * [VERIFIED — DELIBERATELY NOT PUBLISHED] Kristian does have a Google
+     * Workspace mailbox on this domain, but `null` here is a decision, not a
+     * gap: it keeps the address off every rendered page.
+     *
+     * A mailto in public HTML is harvested by scrapers within weeks, and this
+     * is her only business inbox. Enquiries still reach her — the contact form
+     * posts to /api/contact, which delivers to CONTACT_TO_EMAIL. Delivery and
+     * publication are separate concerns, and only delivery is wired up.
+     *
+     * The address lives in the host's env panel and is never committed: this
+     * repository is public. Set it here ONLY if she asks to be contacted
+     * directly, accepting the spam.
      */
     email: null as string | null,
     /**

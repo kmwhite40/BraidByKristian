@@ -139,10 +139,15 @@ These are tracked as `[NEEDS-INPUT]` in `lib/content/site.ts`:
 
 1. **Photo watermarks** — all six photographs carry a *K.Nett 2025 Images* watermark, which sits in frame on the hero. Clean licensed web exports should replace them before launch. The watermark is the photographer's copyright mark and must not be edited out. See [docs/IMAGES.md](docs/IMAGES.md).
 2. **A current bio** — her published bio still names *Fate, TX*, which she has confirmed is out of date (she works out of Garland). Rather than doctor a quote, the verbatim bio was removed from the About page. If she writes a fresh one, add it back to `lib/content/about.ts`.
-3. **Email address** — none is published, so the contact form logs instead of delivering and the "email us" link stays hidden.
+3. **Contact form delivery** — Kristian's Google Workspace mailbox is the target, but `RESEND_API_KEY` / `CONTACT_TO_EMAIL` / `CONTACT_FROM_EMAIL` are unset, so the form still only *logs*. Set them in the host's env panel — **never in this repo, which is public.** Verify the `send.` subdomain in Resend, not the root domain, or her SPF breaks: [docs/CONTACT.md](docs/CONTACT.md).
+
+   The address stays hidden on the site by design (`site.contact.email` is `null`) — delivery and publication are separate, and only delivery is wanted.
 4. **TikTok** — no profile is published; the icon does not render.
-5. **Domain** — `NEXT_PUBLIC_SITE_URL` is a placeholder.
-6. **Testimonial attribution** — the reviews are real but the source does not say which service each client had.
+5. **Testimonial attribution** — the reviews are real but the source does not say which service each client had.
+
+**Resolved:** the domain is `braidsbykristian.com` (registered via Squarespace, Google Workspace
+email live on it). `NEXT_PUBLIC_SITE_URL` now defaults to it. Cutover steps —
+including how not to break her email — are in [docs/HOSTINGER.md](docs/HOSTINGER.md).
 
 ---
 

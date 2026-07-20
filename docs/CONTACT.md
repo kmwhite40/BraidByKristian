@@ -6,25 +6,65 @@ The form works with no environment variables: it validates, accepts, and returns
 
 That is a deliberate trade-off — the site stays deployable with no secrets, and the logs make it obvious mail is not wired up. **Configure it before launch**, or enquiries go nowhere.
 
+## Where enquiries go
+
+Kristian has a **Google Workspace mailbox on `braidsbykristian.com`**. That address is the
+delivery target — but it is deliberately **not published anywhere on the site**.
+
+`site.contact.email` is `null`, which hides the "email us" link. That is a decision, not an
+unfilled placeholder: a mailto in public HTML is harvested within weeks, and this is her only
+business inbox. Enquiries reach her through the form instead. **Delivery and publication are
+separate concerns, and only delivery is wired up.**
+
+The address is never committed — **this repository is public.** It lives only in the host's
+environment panel.
+
 ## Setup (Resend)
 
 1. Create a key at [resend.com/api-keys](https://resend.com/api-keys)
-2. Verify the sending domain in Resend (SPF + DKIM) — unverified domains land in spam
-3. Set all three:
+2. Verify a **`send.` subdomain** in Resend — not the root domain. See the SPF warning below.
+3. Set all three in the host's env panel:
    ```bash
    RESEND_API_KEY=re_xxxxxxxx
-   CONTACT_TO_EMAIL=kristian@…          # where enquiries land
-   CONTACT_FROM_EMAIL=site@braidsbykristian.com   # must be on the verified domain
+   CONTACT_TO_EMAIL=<Kristian's Workspace mailbox>
+   CONTACT_FROM_EMAIL=site@send.braidsbykristian.com
    ```
 4. Confirm the wiring without sending mail:
    ```bash
-   curl https://your-site.com/api/contact
+   curl https://braidsbykristian.com/api/contact
    # {"configured":true}
    ```
 
 All three are required. Any missing → `skipped`.
 
 `reply_to` is set to the sender, so Kristian can just hit reply.
+
+### ⚠ Do not verify the root domain in Resend
+
+`braidsbykristian.com` already publishes an SPF record for Google Workspace:
+
+```
+TXT  @   v=spf1 include:_spf.google.com ~all
+```
+
+**A domain may only have one `v=spf1` record.** Adding Resend's as a second one is an SPF
+*permerror* — receivers stop evaluating, and delivery degrades for Resend **and for Kristian's
+own mail**. Merging both into a single record works but leaves one fragile string that a future
+edit in either service can break.
+
+Verify **`send.braidsbykristian.com`** instead. The subdomain carries its own SPF and DKIM, so
+Resend's DNS records never touch the root zone and her Workspace email is unaffected.
+
+Her live email records — preserve these through any DNS change:
+
+| Type | Host | Value |
+| --- | --- | --- |
+| MX | `@` | `1 smtp.google.com` |
+| TXT | `@` | `v=spf1 include:_spf.google.com ~all` |
+| TXT | `google._domainkey` | `v=DKIM1; k=rsa; p=MIIBIjANBg…` (~400 chars) |
+
+There is currently **no DMARC record**. Adding `_dmarc` with `v=DMARC1; p=none; rua=…` is
+worth doing once Resend is verified, to get visibility before enforcing anything.
 
 ## Another provider
 
