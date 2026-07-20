@@ -3,8 +3,7 @@ import Link from 'next/link'
 import { ArrowDown } from 'lucide-react'
 import { BookButton } from '@/components/ui/book-button'
 import { Container } from '@/components/ui/section'
-import { catalogStats, site } from '@/lib/content'
-import { formatPrice } from '@/lib/utils'
+import { site } from '@/lib/content'
 import { Reveal } from '@/components/motion/reveal'
 
 /**
@@ -76,45 +75,15 @@ export function Hero() {
               </div>
             </Reveal>
 
-            {/* Real, countable facts from the live catalog — not invented
-                "10+ years" or "500+ clients". These numbers are computed. */}
-            <Reveal delay={0.24}>
-              <dl className="mt-10 flex flex-wrap items-baseline gap-x-8 gap-y-3 border-t border-rule pt-6">
-                <div className="flex items-baseline gap-2">
-                  <dt className="sr-only">Styles on the menu</dt>
-                  <dd className="font-[family-name:var(--font-display)] text-2xl text-ink">
-                    {catalogStats.serviceCount}
-                  </dd>
-                  <dd className="text-xs tracking-[0.1em] text-ink-subtle uppercase">
-                    styles
-                  </dd>
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <dt className="sr-only">Starting price</dt>
-                  <dd className="font-[family-name:var(--font-display)] text-2xl text-ink">
-                    {formatPrice(catalogStats.lowestPrice)}
-                  </dd>
-                  <dd className="text-xs tracking-[0.1em] text-ink-subtle uppercase">
-                    starting
-                  </dd>
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <dt className="sr-only">Deposit</dt>
-                  <dd className="font-[family-name:var(--font-display)] text-2xl text-ink">
-                    {formatPrice(site.deposit.amount)}
-                  </dd>
-                  <dd className="text-xs tracking-[0.1em] text-ink-subtle uppercase">
-                    deposit
-                  </dd>
-                </div>
-              </dl>
-            </Reveal>
           </div>
 
           {/* Image */}
           <div className="lg:col-span-6">
             <Reveal delay={0.1} distance={24}>
-              <figure className="relative">
+              {/* A plain div, not a <figure> — the caption was removed, and a
+                  figure with nothing to caption is empty semantics. The alt
+                  text still describes the photograph. */}
+              <div className="relative">
                 {/* The photograph's own aspect ratio (800x538). Matching it
                     exactly means object-cover crops nothing — the earlier
                     780x892 box was a crop of the flyer, which had black mask
@@ -131,10 +100,7 @@ export function Hero() {
                     className="size-full object-cover"
                   />
                 </div>
-                <figcaption className="mt-3 text-xs text-ink-subtle">
-                  Kristian (centre) with clients.
-                </figcaption>
-              </figure>
+              </div>
             </Reveal>
           </div>
         </div>
