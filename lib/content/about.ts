@@ -29,8 +29,8 @@ export const about = {
   intro: [
     'I’m a part-time braider working out of a salon suite in ' +
       site.contact.address.city +
-      ', Texas. Braiding is the part of my week I look forward to — I like the quiet of a long install and the moment at the end when someone turns toward the mirror.',
-    'Because I take one client at a time, your appointment is yours. No rushing you out of the chair, no splitting my attention across three heads. That is also why the sittings are long and honest about it up front: good braids are not fast braids.',
+      ', Texas. Braiding is the part of my week I look forward to — the quiet focus of an install and the moment at the end when someone turns toward the mirror.',
+    'Because I take one client at a time, your appointment is yours. No rushing you out of the chair, no splitting my attention across three heads — just fast, careful hands and parts that stay crisp.',
   ],
 
   philosophy: [

@@ -66,30 +66,6 @@ test.describe('service filters', () => {
   })
 })
 
-test.describe('gallery lightbox', () => {
-  test('opens, pages with the keyboard, and closes on Escape', async ({ page }) => {
-    await page.goto('/gallery')
-    await page.getByRole('button', { name: /view larger/i }).first().click()
-
-    const dialog = page.getByRole('dialog')
-    await expect(dialog).toBeVisible()
-    await expect(dialog).toHaveAttribute('aria-modal', 'true')
-
-    await page.keyboard.press('ArrowRight')
-    await expect(dialog).toBeVisible()
-
-    await page.keyboard.press('Escape')
-    await expect(dialog).toBeHidden()
-  })
-
-  test('has a labelled close control', async ({ page }) => {
-    await page.goto('/gallery')
-    await page.getByRole('button', { name: /view larger/i }).first().click()
-    await page.getByRole('button', { name: /close gallery/i }).click()
-    await expect(page.getByRole('dialog')).toBeHidden()
-  })
-})
-
 test.describe('style finder', () => {
   test('completes and recommends only real, bookable styles', async ({ page }) => {
     await page.goto('/style-finder')
@@ -204,7 +180,9 @@ test.describe('accessibility basics', () => {
   test('images carry alt text, and decorative ones are correctly empty', async ({
     page,
   }) => {
-    await page.goto('/gallery')
+    // A service page with photographs — the gallery page was removed, but the
+    // per-style photos exercise the same alt-text and aria-hidden properties.
+    await page.goto('/services/medium-knotless')
     const imgs = page.locator('img')
     const n = await imgs.count()
     expect(n).toBeGreaterThan(0)

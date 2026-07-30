@@ -255,7 +255,7 @@ export function ServiceCatalog({
               {(
                 [
                   ['all', 'Any'],
-                  ['client', 'You bring the hair'],
+                  ['client', 'Hair provided'],
                   ['not-applicable', 'No added hair'],
                 ] as const
               ).map(([v, label]) => {

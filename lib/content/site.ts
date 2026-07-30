@@ -103,13 +103,32 @@ export const site = {
       handle: '@braidsbykristian',
       url: 'https://www.instagram.com/braidsbykristian/',
     },
-    /**
-     * [NEEDS-INPUT] No TikTok is published on the booking site. Set `url` to a
-     * real profile to make the link appear; while it is null the icon is not
-     * rendered anywhere.
-     */
-    tiktok: null as { handle: string; url: string } | null,
+    /** [VERIFIED — supplied by the business, 2026-07-20] */
+    tiktok: {
+      handle: '@braidsbykristian',
+      url: 'https://www.tiktok.com/@braidsbykristian',
+    } as { handle: string; url: string } | null,
   },
+
+  /* ------------------------------------------------------------------ */
+  /* Braiding hair                                                       */
+  /* ------------------------------------------------------------------ */
+  /**
+   * [VERIFIED — supplied by the business, 2026-07-20]
+   *
+   * Kristian now PROVIDES the braiding hair. This reverses the earlier policy
+   * the catalog was generated under, where most styles were "you bring your
+   * own". Rather than hand-edit the auto-generated per-service `hairProvidedBy`
+   * flags (which stay as Acuity last reported them), this single switch is the
+   * source of truth: while true, the UI states hair is provided and never tells
+   * a client to bring their own.
+   *
+   * The old per-service "bring 3–4 bundles of…" specifics are therefore no
+   * longer shown — they described the previous arrangement. If any style still
+   * needs the client to bring something, that belongs on the booking site and
+   * should be re-sourced from there, not guessed here.
+   */
+  stylistProvidesHair: true,
 
   /* ------------------------------------------------------------------ */
   /* Hours — [VERIFIED] Acuity flyer "Business Hours"                    */

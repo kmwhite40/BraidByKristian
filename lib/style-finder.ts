@@ -74,8 +74,8 @@ export const questions: Question[] = [
     id: 'hair',
     question: 'Braiding hair?',
     options: [
-      { value: 'bring', label: 'I can bring my own', detail: 'What most styles need' },
-      { value: 'own-hair', label: 'I want no added hair' },
+      { value: 'bring', label: 'Braids with added hair', detail: 'Kristian provides the hair' },
+      { value: 'own-hair', label: 'No added hair', detail: 'Styled on my own hair' },
       { value: 'unsure', label: 'Not sure' },
     ],
   },
@@ -153,7 +153,7 @@ export function recommend(answers: Answers): Recommendation[] {
     if (answers.hair === 'own-hair' && s.hairProvidedBy === 'client') score -= 4
     if (answers.hair === 'bring' && s.hairProvidedBy === 'client') {
       score += 1
-      why.push('You bring the braiding hair')
+      why.push('Braiding hair provided')
     }
 
     // Nudge quoted-price services down: they need a conversation first, so they

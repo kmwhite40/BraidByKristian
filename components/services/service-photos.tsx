@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { getCategoryName } from '@/lib/content'
 import type { ServicePhoto } from '@/lib/content'
 
@@ -74,13 +73,6 @@ export function ServicePhotos({
           </li>
         ))}
       </ul>
-
-      <Link
-        href="/gallery"
-        className="mt-6 inline-flex text-sm text-ink underline decoration-clay-500 underline-offset-4 hover:decoration-ink"
-      >
-        See the full gallery
-      </Link>
     </section>
   )
 }

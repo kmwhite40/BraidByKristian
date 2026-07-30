@@ -52,9 +52,12 @@ describe('ServiceCard', () => {
     expect(screen.queryByText(/no added hair/i)).not.toBeInTheDocument()
   })
 
-  it('says who brings the hair when the scheduler proves it', () => {
+  it('states hair is provided for a style that needs added hair', () => {
+    // site.stylistProvidesHair is true: styles the catalog marks 'client' are
+    // now reported as provided, never as "you bring your own".
     render(<ServiceCard service={getService('medium-knotless')!} />)
-    expect(screen.getByText(/you bring the braiding hair/i)).toBeInTheDocument()
+    expect(screen.getByText(/braiding hair provided/i)).toBeInTheDocument()
+    expect(screen.queryByText(/you bring the braiding hair/i)).not.toBeInTheDocument()
   })
 })
 

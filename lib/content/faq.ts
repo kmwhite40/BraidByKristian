@@ -10,10 +10,10 @@ import { formatPrice } from '@/lib/utils'
  */
 const data: Faq[] = [
   {
-    question: 'Is the braiding hair included?',
+    question: 'Do I need to bring my own hair?',
     answer:
-      'For most styles you bring your own braiding hair. When you book, Acuity asks for the hair colour you are providing (1, 1B, 2, 4…) so Kristian can have everything prepped before you arrive. A few services spell out exactly what to bring: Miracle Knot needs 3–4 bundles of 100% human hair feather crochet bundles for a full look, and the Fulani QuickWeave needs 2–3 bundles for a full look in the back. Natural Hair services use no added hair at all. Each service page states what applies to that style.',
-    source: 'acuity-catalog',
+      'No — Kristian now provides the braiding hair for your appointment, so this is one less thing to sort out beforehand. Natural Hair styles use no added hair at all, since they are worked on your own hair. If a particular style needs anything specific from you, it is noted when you book — the booking site always has the current details.',
+    source: 'derived',
     category: 'hair',
   },
   {

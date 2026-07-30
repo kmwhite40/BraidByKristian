@@ -53,7 +53,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: `${service.name} — ${price}`,
-    description: `${service.name} in ${city}. ${price}, about ${formatDuration(service.durationMinutes)} in the chair. ${service.hairProvidedBy === 'client' ? 'You bring the braiding hair. ' : ''}Book online with a ${formatPrice(site.deposit.amount)} deposit.`,
+    description: `${service.name} in ${city}. ${price}, about ${formatDuration(service.durationMinutes)} in the chair. ${service.hairProvidedBy === 'client' && site.stylistProvidesHair ? 'Braiding hair provided. ' : ''}Book online with a ${formatPrice(site.deposit.amount)} deposit.`,
     path: `/services/${service.slug}`,
   })
 }
@@ -84,7 +84,7 @@ export default async function ServiceDetailPage({
     service.hairProvidedBy === 'not-applicable'
       ? ['How should my hair be prepared?', 'Is a deposit required?', 'What happens if I am running late?'].includes(f.question)
       : [
-          'Is the braiding hair included?',
+          'Do I need to bring my own hair?',
           'How should my hair be prepared?',
           'Is a deposit required?',
           'What happens if I am running late?',

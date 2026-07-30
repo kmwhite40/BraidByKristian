@@ -233,10 +233,15 @@ describe('business facts match the booking site', () => {
   })
 
   it('leaves unverified contact channels null rather than inventing them', () => {
-    // No email or TikTok is published on the booking site. If these ever become
-    // non-null, a real value must have been supplied.
+    // No email is published. If it ever becomes non-null, a real value must have
+    // been supplied.
     expect(site.contact.email).toBeNull()
-    expect(site.social.tiktok).toBeNull()
+  })
+
+  it('has the TikTok the business supplied', () => {
+    // Provided directly by Kristian on 2026-07-20.
+    expect(site.social.tiktok?.handle).toBe('@braidsbykristian')
+    expect(site.social.tiktok?.url).toContain('tiktok.com/@braidsbykristian')
   })
 
   it('covers all seven days of opening hours', () => {

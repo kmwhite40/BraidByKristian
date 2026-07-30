@@ -41,11 +41,11 @@ export default function AccessibilityPage() {
                 {[
                   'A skip link to main content as the first stop on every page.',
                   'Every interactive element is reachable and operable by keyboard, with a visible focus ring.',
-                  'The mobile menu and the gallery lightbox trap focus while open, close on Escape, and return focus where you left it.',
+                  'The mobile menu traps focus while open, closes on Escape, and returns focus where you left it.',
                   'Text meets or beats 4.5:1 contrast against its background; the clay brand colour is used for surfaces and rules, never for text.',
                   'Buttons and tap targets are at least 44×44px.',
                   'Form fields have real labels, and errors are announced — not signalled by colour alone.',
-                  'Filtering styles and the gallery announce their results to screen readers.',
+                  'Filtering styles announces the results to screen readers.',
                   'Images carry descriptive alt text that says what is in the photo.',
                   'Prices, durations and policies are real text, never baked into an image.',
                   'If you have reduced motion turned on, the entrance animations do not run at all.',
@@ -76,7 +76,7 @@ export default function AccessibilityPage() {
                 <p>
                   <strong className="font-medium text-ink">Photography.</strong> There are
                   only a few photographs of Kristian’s work available right now. Every one
-                  has alt text, but the gallery is smaller than we would like.
+                  has descriptive alt text, but there are fewer than we would like.
                 </p>
               </div>
             </section>

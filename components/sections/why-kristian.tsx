@@ -34,7 +34,7 @@ const reasons = [
   {
     n: '04',
     title: 'No surprises at the chair',
-    body: `Every style publishes its price, its sitting time, its add-ons and what you need to bring. The ${formatPrice(site.deposit.amount)} deposit comes off the total — it is not an extra.`,
+    body: `Every style publishes its price, its sitting time and its add-ons up front. The ${formatPrice(site.deposit.amount)} deposit comes off the total — it is not an extra.`,
   },
 ]
 
@@ -46,10 +46,11 @@ export function WhyKristian() {
           <div className="lg:col-span-4">
             <p className="eyebrow">Why book with Kristian</p>
             <h2 className="mt-5 text-[length:var(--text-display-md)] leading-[1.05] text-ink">
-              Good braids are not fast braids
+              Fast hands, clean parts
             </h2>
             <p className="measure mt-5 leading-relaxed text-ink-muted">
-              These are long appointments. Here is what that time actually buys you.
+              Time in the chair adds up to crisp, even parts — and you are not sitting a
+              minute longer than the style needs.
             </p>
           </div>
 

@@ -140,10 +140,10 @@ export function getServicePhotos(service: Service, limit = 3): ServicePhoto[] {
  * slugs throw at build time rather than rendering an empty card.
  */
 export const featuredServiceSlugs = [
+  'small-bohemian-knotless',
   'medium-knotless',
-  'medium-bohemian-knotless',
   'small-island-twist',
-  'small-medium-soft-locs',
+  'natural-hair-4-plus-straight-back-cornrow',
 ] as const
 
 export function getFeaturedServices(): Service[] {

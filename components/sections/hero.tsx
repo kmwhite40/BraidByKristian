@@ -54,9 +54,9 @@ export function Hero() {
 
             <Reveal delay={0.12}>
               <p className="measure mt-7 text-lg leading-relaxed text-ink-muted">
-                Knotless, bohemian, twists and locs — installed one client at a time in a
-                salon suite in {site.contact.address.city}. Every price and every sitting
-                time is on the menu before you book.
+                Clean knotless braids, boho styles, natural hair styles, and loc
+                retwists in a private {site.contact.address.city} salon suite. Every
+                price and every sitting time is on the menu before you book.
               </p>
             </Reveal>
 

@@ -25,7 +25,7 @@ const steps = [
   {
     n: '2',
     title: 'Choose a date',
-    body: 'The scheduler shows Kristian’s real availability. Pick a time and add the hair colour you are bringing.',
+    body: 'The scheduler shows Kristian’s real availability. Pick the time that works for you.',
   },
   {
     n: '3',

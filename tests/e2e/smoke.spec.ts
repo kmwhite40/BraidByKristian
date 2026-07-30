@@ -4,7 +4,6 @@ const ROUTES = [
   '/',
   '/services',
   '/services/medium-knotless',
-  '/gallery',
   '/about',
   '/book',
   '/policies',

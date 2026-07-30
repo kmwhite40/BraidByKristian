@@ -17,7 +17,7 @@ const items = [
   },
   {
     label: 'One client at a time',
-    detail: 'A private salon suite, not a shared floor',
+    detail: 'A private salon suite',
   },
   {
     label: 'Ages 12 & under welcome',

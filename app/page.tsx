@@ -3,7 +3,6 @@ import { Hero } from '@/components/sections/hero'
 import { TrustStrip } from '@/components/sections/trust-strip'
 import { FeaturedStyles } from '@/components/sections/featured-styles'
 import { WhyKristian } from '@/components/sections/why-kristian'
-import { GalleryPreview } from '@/components/sections/gallery-preview'
 import { BookingJourney } from '@/components/sections/booking-journey'
 import { Testimonials } from '@/components/sections/testimonials'
 import { AboutPreview } from '@/components/sections/about-preview'
@@ -23,7 +22,7 @@ export const metadata: Metadata = buildMetadata({
 /** The five questions that actually block a booking. The rest live on /faq. */
 const homeFaqs = faqs.filter((f) =>
   [
-    'Is the braiding hair included?',
+    'Do I need to bring my own hair?',
     'How should my hair be prepared?',
     'Is a deposit required?',
     'How long will my appointment take?',
@@ -38,7 +37,6 @@ export default function HomePage() {
       <TrustStrip />
       <FeaturedStyles />
       <WhyKristian />
-      <GalleryPreview />
       <BookingJourney />
       <Testimonials />
       <AboutPreview />

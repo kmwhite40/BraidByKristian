@@ -1,7 +1,6 @@
 /** Primary navigation. Edit here — the header, footer and mobile menu all read this. */
 export const primaryNav = [
   { href: '/services', label: 'Services' },
-  { href: '/gallery', label: 'Gallery' },
   { href: '/about', label: 'About' },
   { href: '/policies', label: 'Policies' },
   { href: '/faq', label: 'FAQ' },
