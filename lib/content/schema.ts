@@ -72,6 +72,13 @@ export const rawServiceSchema = z.object({
   notes: z.array(z.string()),
   hairProvidedBy: hairProvidedBySchema,
   hairEvidence: z.string().min(1),
+  /**
+   * True when the Acuity description explicitly says the hair or bundles are
+   * NOT included. This outranks `site.stylistProvidesHair`: a blanket "she
+   * supplies it now" must never mask a style where the scheduler still tells
+   * the client to bring their own.
+   */
+  hairExplicitlyExcluded: z.boolean(),
   addonIds: z.array(z.number().int().positive()),
   requiresHairColorForm: z.boolean(),
   calendar: z.string(),

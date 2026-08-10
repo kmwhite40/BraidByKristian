@@ -20,7 +20,7 @@ That is the whole library, and it is the site's biggest gap. **The single highes
 - **No generic "braid" imagery** that misrepresents her actual work.
 
 This is why the service cards are typographic rather than a grid of empty image
-wells: there is no photograph of most of the 47 styles, and a stock braid photo
+wells: there is no photograph of most of the 46 styles, and a stock braid photo
 would misrepresent her work. A short honest gallery beats a padded dishonest one.
 
 Four of the six now carry a `category` and `serviceSlug`, which is what turns on

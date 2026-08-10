@@ -5,6 +5,7 @@ import {
   services,
   catalogStats,
   getService,
+  hairArrangement,
   getFeaturedServices,
   getRelatedServices,
   getServicePhotos,
@@ -28,7 +29,7 @@ import {
 
 describe('catalog integrity', () => {
   it('holds the full catalog extracted from Acuity', () => {
-    expect(services).toHaveLength(47)
+    expect(services).toHaveLength(46)
     expect(categories).toHaveLength(11)
     expect(addons).toHaveLength(7)
   })
@@ -84,14 +85,20 @@ describe('pricing truthfulness', () => {
   it('matches known prices from the live scheduler exactly', () => {
     // Spot-checks transcribed from the Acuity BUSINESS payload.
     const expected: Record<string, number> = {
-      'medium-knotless': 155,
-      'small-knotless': 170,
-      'large-knotless': 140,
-      'extra-small-bohemian-knotless': 265,
+      'medium-knotless': 180,
+      'small-knotless': 190,
+      'large-knotless': 170,
+      'extra-small-bohemian-knotless': 275,
       'extra-small-bora-bora': 300,
-      'natural-hair-2-to-4-straight-back-cornrow': 75,
+      'natural-hair-2-to-4-straight-back-cornrow': 125,
       'braid-removal': 125,
-      'loc-re-twist': 130,
+      'loc-re-twist': 125,
+      'small-senegalese-twist': 190,
+      'medium-senegalese-twist': 180,
+      'small-mini-twist': 180,
+      'medium-mini-twist': 170,
+      'small-island-twist': 190,
+      'medium-island-twist': 180,
     }
     for (const [slug, price] of Object.entries(expected)) {
       expect(getService(slug)?.price, slug).toBe(price)
@@ -99,7 +106,7 @@ describe('pricing truthfulness', () => {
   })
 
   it('reports the true lowest price', () => {
-    expect(catalogStats.lowestPrice).toBe(75)
+    expect(catalogStats.lowestPrice).toBe(100)
   })
 
   it('never quotes a category price below its cheapest service', () => {
@@ -131,7 +138,7 @@ describe('durations', () => {
   })
 
   it('matches known durations from the live scheduler', () => {
-    expect(getService('medium-knotless')?.durationMinutes).toBe(360)
+    expect(getService('medium-knotless')?.durationMinutes).toBe(300)
     expect(getService('extra-small-bohemian-knotless')?.durationMinutes).toBe(540)
     expect(getService('extra-small-bora-bora')?.durationMinutes).toBe(570)
     expect(getService('braid-removal')?.durationMinutes).toBe(210)
@@ -366,5 +373,60 @@ describe('service photographs', () => {
     for (const service of services) {
       expect(getServicePhotos(service, 2).length).toBeLessThanOrEqual(2)
     }
+  })
+})
+
+/**
+ * Kristian now supplies the braiding hair (`site.stylistProvidesHair`), but a
+ * few styles on the live scheduler still say the client brings bundles. A
+ * blanket "hair provided" on those would send someone to the chair empty
+ * handed, so the global switch must never mask an explicit exclusion.
+ */
+describe('braiding hair exceptions', () => {
+  const excluded = ['small-miracle-knot', 'medium-miracle-knot', 'fulani-quickweave']
+
+  it('flags every style whose Acuity description excludes hair or bundles', () => {
+    for (const slug of excluded) {
+      expect(getService(slug)?.hairExplicitlyExcluded, slug).toBe(true)
+    }
+  })
+
+  it('flags nothing else — the flag tracks the scheduler, not a guess', () => {
+    const flagged = services.filter((s) => s.hairExplicitlyExcluded).map((s) => s.slug)
+    expect(flagged.sort()).toEqual([...excluded].sort())
+  })
+
+  it('keeps the flag consistent with the notes it was derived from', () => {
+    for (const s of services) {
+      const saysExcluded = s.notes.some((n) => /\b(hair|bundles) (is|are) not included\b/i.test(n))
+      expect(s.hairExplicitlyExcluded, s.slug).toBe(saysExcluded)
+    }
+  })
+
+  it('tells the client to bring hair for an excluded style, despite the global switch', () => {
+    expect(site.stylistProvidesHair).toBe(true)
+    expect(hairArrangement(getService('medium-miracle-knot')!)).toBe('client-brings')
+  })
+
+  it('still reports hair as provided for an ordinary added-hair style', () => {
+    expect(hairArrangement(getService('small-knotless')!)).toBe('provided')
+  })
+
+  it('reports no added hair for a natural-hair style', () => {
+    expect(hairArrangement(getService('natural-hair-box-braids')!)).toBe('none')
+  })
+
+  it('stays silent when the scheduler never said', () => {
+    const unknown = services.find((s) => s.hairProvidedBy === 'unspecified')!
+    expect(hairArrangement(unknown)).toBe('unknown')
+  })
+
+  it('excludes the exception styles from the "hair provided" count', () => {
+    expect(catalogStats.stylistProvidesHairCount).toBe(
+      services.filter((s) => hairArrangement(s) === 'provided').length,
+    )
+    expect(catalogStats.stylistProvidesHairCount).toBeLessThan(
+      services.filter((s) => s.hairProvidedBy === 'client').length,
+    )
   })
 })

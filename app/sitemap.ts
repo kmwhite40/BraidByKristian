@@ -3,7 +3,7 @@ import { services } from '@/lib/content'
 import { absoluteUrl } from '@/lib/seo'
 
 /**
- * Sitemap: the 12 static routes plus all 47 service pages.
+ * Sitemap: the 10 static routes plus all 46 service pages.
  *
  * /book is highest priority after the homepage — it is the page that earns the
  * money. Service pages rank above the informational routes.

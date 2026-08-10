@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { useQueryParam } from '@/lib/hooks/use-query-param'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { ServiceCard } from '@/components/ui/service-card'
-import { getCategoryName, SIZE_LABELS } from '@/lib/content'
+import { getCategoryName, hairArrangement, SIZE_LABELS } from '@/lib/content'
 import { formatDuration } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import type { Service, CategorySlug, Size } from '@/lib/content'
@@ -23,7 +23,7 @@ const SORTS: { value: Sort; label: string }[] = [
 /**
  * The full catalog, filtered client-side.
  *
- * All 47 services are server-rendered into the page, so the list is complete
+ * All 46 services are server-rendered into the page, so the list is complete
  * and indexable before any JS runs, and filtering is instant with no network.
  * At this size that is strictly better than paginating.
  *
@@ -70,7 +70,7 @@ export function ServiceCatalog({
   const [chosenCategory, setCategory] = useState<CategorySlug | 'all' | null>(null)
   const category: CategorySlug | 'all' = chosenCategory ?? paramCategory ?? 'all'
   const [size, setSize] = useState<Size | 'all'>('all')
-  const [hairFilter, setHairFilter] = useState<'all' | 'client' | 'not-applicable'>('all')
+  const [hairFilter, setHairFilter] = useState<'all' | 'provided' | 'none'>('all')
   const [sort, setSort] = useState<Sort>('featured')
   const [showFilters, setShowFilters] = useState(false)
 
@@ -85,7 +85,7 @@ export function ServiceCatalog({
     let out = services.filter((s) => {
       if (category !== 'all' && s.category !== category) return false
       if (size !== 'all' && s.size !== size) return false
-      if (hairFilter !== 'all' && s.hairProvidedBy !== hairFilter) return false
+      if (hairFilter !== 'all' && hairArrangement(s) !== hairFilter) return false
       if (q) {
         const haystack = `${s.name} ${getCategoryName(s.category)} ${s.notes.join(' ')}`
         if (!haystack.toLowerCase().includes(q)) return false
@@ -255,8 +255,8 @@ export function ServiceCatalog({
               {(
                 [
                   ['all', 'Any'],
-                  ['client', 'Hair provided'],
-                  ['not-applicable', 'No added hair'],
+                  ['provided', 'Hair provided'],
+                  ['none', 'No added hair'],
                 ] as const
               ).map(([v, label]) => {
                 const active = hairFilter === v

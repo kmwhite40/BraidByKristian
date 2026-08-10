@@ -34,19 +34,19 @@ test.describe('service filters', () => {
   test.skip(({ viewport }) => (viewport?.width ?? 0) < 1024, 'filters collapse on mobile')
 
   // The result count lives in the aria-live region. Scope to it: the phrase
-  // "47 styles" also appears in the page lede and the closing CTA copy.
+  // "46 styles" also appears in the page lede and the closing CTA copy.
   const resultCount = (page: import('@playwright/test').Page) =>
     page.locator('p[aria-live="polite"]').first()
 
   test('filters, searches and resets', async ({ page }) => {
     await page.goto('/services')
-    await expect(resultCount(page)).toHaveText('47 styles')
+    await expect(resultCount(page)).toHaveText('46 styles')
 
     await page.getByRole('button', { name: 'Locs', exact: true }).click()
     await expect(resultCount(page)).toHaveText('2 styles')
 
     await page.getByRole('button', { name: /clear filters/i }).click()
-    await expect(resultCount(page)).toHaveText('47 styles')
+    await expect(resultCount(page)).toHaveText('46 styles')
 
     await page.getByLabel(/search styles/i).fill('bohemian')
     await expect(resultCount(page)).toContainText(/styles/)
@@ -56,8 +56,8 @@ test.describe('service filters', () => {
     await page.goto('/services')
     await page.getByLabel(/search styles/i).fill('qqqqzzz')
     await expect(page.getByText(/no styles match those filters/i)).toBeVisible()
-    await page.getByRole('button', { name: /show all 47 styles/i }).click()
-    await expect(resultCount(page)).toHaveText('47 styles')
+    await page.getByRole('button', { name: /show all 46 styles/i }).click()
+    await expect(resultCount(page)).toHaveText('46 styles')
   })
 
   test('deep-links a category from the URL', async ({ page }) => {
@@ -242,7 +242,7 @@ test.describe('seo', () => {
     const xml = await res.text()
     expect(xml).toContain('/services/medium-knotless')
     expect(xml).toContain('/book')
-    expect((xml.match(/<url>/g) ?? []).length).toBe(58) // 11 static + 47 services
+    expect((xml.match(/<url>/g) ?? []).length).toBe(56) // 10 static + 46 services
   })
 
   test('robots allows crawling and points at the sitemap', async ({ request }) => {

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { site } from '@/lib/content'
+import { hairArrangement } from '@/lib/content'
 import type { Service } from '@/lib/content'
 
 /**
@@ -10,10 +10,10 @@ import type { Service } from '@/lib/content'
  * correct; a confident guess about whether hair is included would be a
  * fabricated business fact, and the client would find out at the chair.
  *
- * `site.stylistProvidesHair` overrides the per-service data: Kristian now
- * provides the braiding hair, so styles the catalog still marks 'client' are
- * reported as provided, and their old "bring 3–4 bundles" evidence — which
- * described the previous arrangement — is not shown.
+ * `hairArrangement` resolves the global policy and the per-style exceptions
+ * together: Kristian now provides the braiding hair, so styles the catalog
+ * still marks 'client' are reported as provided — except the few the live
+ * scheduler explicitly excludes, where the client really does bring bundles.
  */
 export function HairNotice({
   service,
@@ -24,16 +24,17 @@ export function HairNotice({
   compact?: boolean
   className?: string
 }) {
-  if (service.hairProvidedBy === 'unspecified') return null
+  const arrangement = hairArrangement(service)
 
-  // Natural-hair styles ('not-applicable') use no added hair at all — true
-  // regardless of who would otherwise supply it, so it still shows.
-  if (service.hairProvidedBy === 'not-applicable') {
+  if (arrangement === 'unknown') return null
+
+  // Natural-hair styles use no added hair at all — true regardless of who
+  // would otherwise supply it, so it still shows.
+  if (arrangement === 'none') {
     return renderNotice('No added hair — styled on your own hair', null, compact, className)
   }
 
-  // hairProvidedBy === 'client' — but the stylist now provides it.
-  if (site.stylistProvidesHair) {
+  if (arrangement === 'provided') {
     return renderNotice('Braiding hair provided', null, compact, className)
   }
 

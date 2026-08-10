@@ -1,4 +1,4 @@
-import { services, type Service } from '@/lib/content'
+import { hairArrangement, services, type Service } from '@/lib/content'
 import type { CategorySlug } from '@/lib/content/schema'
 
 /**
@@ -151,7 +151,9 @@ export function recommend(answers: Answers): Recommendation[] {
       why.push('No added hair')
     }
     if (answers.hair === 'own-hair' && s.hairProvidedBy === 'client') score -= 4
-    if (answers.hair === 'bring' && s.hairProvidedBy === 'client') {
+    // Only styles Kristian actually supplies hair for — a few still tell the
+    // client to bring bundles, and promising otherwise strands them.
+    if (answers.hair === 'bring' && hairArrangement(s) === 'provided') {
       score += 1
       why.push('Braiding hair provided')
     }

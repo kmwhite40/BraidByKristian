@@ -1,4 +1,5 @@
 import { rawAddons, rawCategories, rawServices } from './services.data'
+import { site } from './site'
 import { galleryItems } from './gallery'
 import {
   rawAddonSchema,
@@ -117,7 +118,7 @@ export type ServicePhoto = GalleryItem & { exact: boolean }
  * Photographs to show on a service page: exact matches first, then others from
  * the same category.
  *
- * Returns `[]` for most services today — only 6 photos exist and 47 services do
+ * Returns `[]` for most services today — only 6 photos exist and 46 services do
  * — and the section renders nothing rather than a placeholder. As photos are
  * tagged in `gallery.ts` they appear here automatically; there is no per-service
  * wiring to maintain.
@@ -154,6 +155,26 @@ export function getFeaturedServices(): Service[] {
   })
 }
 
+/**
+ * Who supplies the braiding hair for one style, once the global policy and the
+ * per-style exceptions are both applied. Every surface that mentions hair reads
+ * this — the card badge, the service page, the catalog filter, the style finder
+ * — so they cannot drift apart or contradict each other on the same page.
+ *
+ *  - `none`          — the style adds no hair at all
+ *  - `provided`      — Kristian supplies it
+ *  - `client-brings` — the scheduler explicitly says the client does
+ *  - `unknown`       — the scheduler never said; the UI must stay silent
+ */
+export type HairArrangement = 'none' | 'provided' | 'client-brings' | 'unknown'
+
+export function hairArrangement(service: Service): HairArrangement {
+  if (service.hairProvidedBy === 'not-applicable') return 'none'
+  if (service.hairExplicitlyExcluded) return 'client-brings'
+  if (service.hairProvidedBy === 'unspecified') return 'unknown'
+  return site.stylistProvidesHair ? 'provided' : 'client-brings'
+}
+
 /* ---------------------------------------------------------------------------
    Catalog-wide facts. Computed, never hand-typed, so they cannot drift.
 --------------------------------------------------------------------------- */
@@ -164,8 +185,12 @@ export const catalogStats = {
   lowestPrice: Math.min(
     ...services.filter((s) => s.priceMode === 'fixed').map((s) => s.price),
   ),
-  /** Services where the client supplies the braiding hair (proven, not guessed). */
-  clientProvidesHairCount: services.filter((s) => s.hairProvidedBy === 'client').length,
+  /** Styles Kristian supplies the braiding hair for, exceptions excluded. */
+  stylistProvidesHairCount: services.filter((s) => hairArrangement(s) === 'provided')
+    .length,
+  /** Styles the scheduler still says the client brings hair or bundles for. */
+  clientProvidesHairCount: services.filter((s) => hairArrangement(s) === 'client-brings')
+    .length,
 } as const
 
 export const SIZE_LABELS: Record<string, string> = {

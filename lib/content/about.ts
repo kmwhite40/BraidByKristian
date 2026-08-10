@@ -9,7 +9,7 @@ import { site } from './site'
  *   "salon suite"              → her flyer: "welcome you into my luxury salon suite"
  *   "safest ... approach"      → her prep flyer, on hair history
  *   "confident, cared for"     → her bio
- *   47 styles / 11 categories  → counted from the live scheduler
+ *   46 styles / 11 categories  → counted from the live scheduler
  *
  * Nothing about years of experience, training, certifications, client counts or
  * awards appears here, because none of it is published anywhere we can verify.

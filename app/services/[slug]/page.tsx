@@ -20,6 +20,7 @@ import {
   getRelatedServices,
   getService,
   getServicePhotos,
+  hairArrangement,
   services,
   faqs,
   preparation,
@@ -29,7 +30,7 @@ import {
 import { buildMetadata } from '@/lib/seo'
 import { formatDuration, formatPrice } from '@/lib/utils'
 
-/** All 47 pages are prerendered at build time. */
+/** All 46 pages are prerendered at build time. */
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }))
 }
@@ -53,7 +54,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: `${service.name} — ${price}`,
-    description: `${service.name} in ${city}. ${price}, about ${formatDuration(service.durationMinutes)} in the chair. ${service.hairProvidedBy === 'client' && site.stylistProvidesHair ? 'Braiding hair provided. ' : ''}Book online with a ${formatPrice(site.deposit.amount)} deposit.`,
+    description: `${service.name} in ${city}. ${price}, about ${formatDuration(service.durationMinutes)} in the chair. ${hairArrangement(service) === 'provided' ? 'Braiding hair provided. ' : ''}Book online with a ${formatPrice(site.deposit.amount)} deposit.`,
     path: `/services/${service.slug}`,
   })
 }
@@ -178,7 +179,7 @@ export default async function ServiceDetailPage({
               )}
 
               {/* Braiding hair */}
-              {service.hairProvidedBy !== 'unspecified' ? (
+              {hairArrangement(service) !== 'unknown' ? (
                 <div className="mt-10">
                   <h2 className="text-xl text-ink">Braiding hair</h2>
                   <HairNotice service={service} className="mt-4" />

@@ -81,3 +81,19 @@ describe('style finder', () => {
     }
   })
 })
+
+describe('braiding hair exceptions', () => {
+  it('never promises provided hair for a style the scheduler excludes', () => {
+    for (const r of recommend({ ...base, hair: 'bring' })) {
+      if (r.service.hairExplicitlyExcluded) {
+        expect(r.why, r.service.slug).not.toContain('Braiding hair provided')
+      }
+    }
+  })
+
+  it('does not surface a bring-your-own-bundles style as one where hair is provided', () => {
+    const results = recommend({ ...base, hair: 'bring', look: 'unsure' })
+    const top = results.slice(0, 5).filter((r) => r.why.includes('Braiding hair provided'))
+    for (const r of top) expect(r.service.hairExplicitlyExcluded, r.service.slug).toBe(false)
+  })
+})

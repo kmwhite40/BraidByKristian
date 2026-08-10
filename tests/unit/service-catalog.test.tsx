@@ -14,8 +14,8 @@ describe('ServiceCard', () => {
     const s = getService('medium-knotless')!
     render(<ServiceCard service={s} />)
 
-    expect(screen.getByText('$155')).toBeInTheDocument()
-    expect(screen.getByText('6 hr')).toBeInTheDocument()
+    expect(screen.getByText('$180')).toBeInTheDocument()
+    expect(screen.getByText('5 hr')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /details/i })).toHaveAttribute(
       'href',
       '/services/medium-knotless',
@@ -29,7 +29,7 @@ describe('ServiceCard', () => {
 
     const book = screen.getByRole('link', { name: /^book/i })
     // The appointmentType is what preselects the style — a bare scheduler link
-    // would dump the client on the full 47-item menu.
+    // would dump the client on the full 46-item menu.
     expect(book).toHaveAttribute(
       'href',
       `https://braidsbykristian.as.me/schedule/b36fc416?appointmentType=${s.id}`,
@@ -64,7 +64,7 @@ describe('ServiceCard', () => {
 describe('ServiceCatalog', () => {
   it('renders the whole catalog by default', () => {
     renderCatalog()
-    expect(screen.getByText('47 styles')).toBeInTheDocument()
+    expect(screen.getByText('46 styles')).toBeInTheDocument()
   })
 
   it('filters by category', async () => {
@@ -98,8 +98,8 @@ describe('ServiceCatalog', () => {
     await user.selectOptions(screen.getByLabelText(/sort styles/i), 'price-asc')
 
     const headings = screen.getAllByRole('heading', { level: 3 })
-    // $75 Natural Hair 2 to 4 Straight Back Cornrow is the cheapest real service.
-    expect(headings[0]).toHaveTextContent(/natural hair 2 to 4 straight back cornrow/i)
+    // $100 Lil Krownz Back 2 School Special is the cheapest real service.
+    expect(headings[0]).toHaveTextContent(/lil krownz back 2 school special/i)
   })
 
   it('sorts by longest appointment', async () => {
@@ -130,9 +130,9 @@ describe('ServiceCatalog', () => {
     await user.type(screen.getByLabelText(/search styles/i), 'zzzznotathing')
 
     expect(screen.getByText(/no styles match those filters/i)).toBeInTheDocument()
-    const reset = screen.getByRole('button', { name: /show all 47 styles/i })
+    const reset = screen.getByRole('button', { name: /show all 46 styles/i })
     await user.click(reset)
-    expect(screen.getByText('47 styles')).toBeInTheDocument()
+    expect(screen.getByText('46 styles')).toBeInTheDocument()
   })
 
   it('announces the result count to screen readers', async () => {
@@ -144,5 +144,29 @@ describe('ServiceCatalog', () => {
     const live = container.querySelector('[aria-live="polite"]')
     expect(live).toBeTruthy()
     expect(within(live as HTMLElement).getByText(/2 styles/i)).toBeInTheDocument()
+  })
+})
+
+/**
+ * Kristian supplies the braiding hair now, but Miracle Knot and Fulani
+ * QuickWeave still say "bundles are not included" on the live scheduler.
+ * Telling that client "hair provided" sends them to the chair empty handed.
+ */
+describe('braiding hair exceptions', () => {
+  it('tells the client to bring hair for a style the scheduler excludes', () => {
+    render(<ServiceCard service={getService('medium-miracle-knot')!} />)
+    expect(screen.getByText(/you bring the braiding hair/i)).toBeInTheDocument()
+    expect(screen.queryByText(/braiding hair provided/i)).not.toBeInTheDocument()
+  })
+
+  it('leaves the excluded styles out of the "hair provided" filter', async () => {
+    const user = userEvent.setup()
+    renderCatalog()
+
+    await user.click(screen.getByRole('button', { name: /^hair provided$/i }))
+
+    const headings = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)
+    expect(headings.length).toBeGreaterThan(0)
+    expect(headings.join(' ')).not.toMatch(/miracle knot|quickweave/i)
   })
 })

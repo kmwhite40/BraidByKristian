@@ -9,7 +9,7 @@ import { FavoriteButton } from '@/components/favorite-button'
 /**
  * Service card.
  *
- * No image: there is no photograph of most of these 47 styles, and a stock
+ * No image: there is no photograph of most of these 46 styles, and a stock
  * braid photo would misrepresent Kristian's work. Instead the card leads with
  * the price as display type — which is what people are actually scanning for —
  * and treats the rest as an editorial spec list. It reads as a deliberate

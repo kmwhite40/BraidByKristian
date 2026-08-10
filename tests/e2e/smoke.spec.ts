@@ -53,8 +53,8 @@ test.describe('routes', () => {
   }) => {
     const html = await (await request.get('/services')).text()
     const deepLinks = html.match(/appointmentType=\d+/g) ?? []
-    expect(deepLinks.length, 'every service needs a book link in the HTML').toBe(47)
-    expect(html).toContain('47 styles')
+    expect(deepLinks.length, 'every service needs a book link in the HTML').toBe(46)
+    expect(html).toContain('46 styles')
     expect(html).toContain('Medium Knotless')
   })
 
@@ -94,7 +94,7 @@ test.describe('booking links', () => {
   test('a service CTA deep-links the scheduler to that exact style', async ({ page }) => {
     await page.goto('/services/medium-knotless')
     // 75443741 is Medium Knotless's Acuity appointmentType. Without it the
-    // client lands on the full 47-item menu.
+    // client lands on the full 46-item menu.
     await expect(page.getByRole('link', { name: /book this style/i })).toHaveAttribute(
       'href',
       `${SCHEDULER}?appointmentType=75443741`,

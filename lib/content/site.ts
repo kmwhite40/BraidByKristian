@@ -123,10 +123,14 @@ export const site = {
    * source of truth: while true, the UI states hair is provided and never tells
    * a client to bring their own.
    *
-   * The old per-service "bring 3–4 bundles of…" specifics are therefore no
-   * longer shown — they described the previous arrangement. If any style still
-   * needs the client to bring something, that belongs on the booking site and
-   * should be re-sourced from there, not guessed here.
+   * The old per-service "bring 3–4 bundles of…" evidence is therefore no longer
+   * shown — it described the previous arrangement.
+   *
+   * Three styles are the exception, re-sourced from the live scheduler (not
+   * guessed): both Miracle Knots and the Fulani QuickWeave still say hair or
+   * bundles are NOT included. They carry `hairExplicitlyExcluded` and outrank
+   * this switch. Resolve the two together with `hairArrangement()` in
+   * `lib/content/index.ts` — never read this flag on its own.
    */
   stylistProvidesHair: true,
 

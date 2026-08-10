@@ -14,7 +14,7 @@ export function absoluteUrl(path = '/'): string {
 
 /**
  * Per-page metadata. `path` drives the canonical URL, which is the one thing
- * that must never be templated wrong — duplicate canonicals across a 47-service
+ * that must never be templated wrong — duplicate canonicals across a 46-service
  * catalog would flatten the whole site in search.
  */
 export function buildMetadata({

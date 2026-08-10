@@ -17,7 +17,7 @@ import { bookingUrl, serviceBookingUrl } from '@/lib/booking/acuity'
  * In 'external' mode this routes straight to Kristian's Acuity scheduler. When
  * a `service` is given it deep-links to that exact style via
  * ?appointmentType=<id>, so someone booking Medium Knotless lands on Medium
- * Knotless rather than the full 47-item menu.
+ * Knotless rather than the full 46-item menu.
  *
  * External links open in a new tab: the scheduler is a different origin, and
  * losing the site mid-decision is worse than a second tab. `rel="noopener"` is

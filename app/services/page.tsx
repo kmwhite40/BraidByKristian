@@ -39,7 +39,7 @@ export default function ServicesPage() {
       <Section className="py-12 sm:py-16">
         <Container>
           {/* No Suspense: ServiceCatalog no longer calls useSearchParams, so it
-              prerenders with all 47 cards in the HTML. A fallback here would put
+              prerenders with all 46 cards in the HTML. A fallback here would put
               the catalog back behind a client render. */}
           <ServiceCatalog services={services} categories={categories} />
         </Container>

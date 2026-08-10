@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
  * Why not just use `useSearchParams`? Because it opts the whole component tree
  * out of prerendering. Next then requires a <Suspense> boundary and ships only
  * the fallback in the static HTML — which on /services meant a 96px placeholder
- * instead of 47 service cards: a 0.151 CLS, nothing for a non-JS client, and
+ * instead of 46 service cards: a 0.151 CLS, nothing for a non-JS client, and
  * the catalog missing from the HTML a crawler sees first.
  *
  * This reads `window.location.search` after mount instead, so the component

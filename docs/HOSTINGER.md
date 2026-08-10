@@ -267,7 +267,7 @@ Then re-check the email records above, because this is one of the operations tha
 - [ ] `/book` — the Acuity calendar loads and shows real availability
 - [ ] A Book button opens the scheduler deep-linked to that style
 - [ ] `curl https://braidsbykristian.com/api/contact` → `{"configured":true}`, then send a real test message
-- [ ] `/sitemap.xml` lists 58 URLs on the live domain
+- [ ] `/sitemap.xml` lists 56 URLs on the live domain
 - [ ] Submit the sitemap in Google Search Console
 - [ ] Replace the watermarked photography (see [IMAGES.md](IMAGES.md))
 
@@ -278,7 +278,7 @@ panel. The site is almost entirely static, so a rollback is quick and safe.
 
 ## Notes for later
 
-- **`/api/contact` is the only dynamic route.** Everything else — all 63 pages, including the 47
+- **`/api/contact` is the only dynamic route.** Everything else — all 61 pages, including the 46
   service pages — is prerendered at build time. If that route is ever removed, the site becomes a
   candidate for static export and a cheaper plan (accepting the trade-offs above).
 - **Rate limiting** on `/api/contact` is in-memory and resets whenever the Node process restarts.

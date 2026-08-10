@@ -45,7 +45,7 @@ There is no vector original — her logo is baked into a leopard-print raster, u
 
 ## Rules held to
 
-- **No image on service cards.** There is no photo of most of the 47 styles, and a stock braid photo would misrepresent her work. The cards lead with the **price as display type** — what people actually scan for — and treat the rest as an editorial spec list. A deliberate typographic catalog beats a grid of empty image wells.
+- **No image on service cards.** There is no photo of most of the 46 styles, and a stock braid photo would misrepresent her work. The cards lead with the **price as display type** — what people actually scan for — and treat the rest as an editorial spec list. A deliberate typographic catalog beats a grid of empty image wells.
 - **No gradient scrims.** Captions sit on solid plates. The scrim is the tell, and solid keeps text contrast real.
 - **Hairlines, not cards.** No `rounded-2xl` + `shadow-xl`.
 - **One accent family.** Clay/espresso. No second hue.
@@ -63,7 +63,7 @@ The entire vocabulary for page content is **one** short rise+fade, once, on scro
 
 - `useSyncExternalStore` for scroll + localStorage (no setState-in-effect, SSR-safe, no tearing)
 - `@starting-style` + `transition-behavior: allow-discrete` — the mobile menu animates in with **no JS**
-- `content-visibility: auto` on the 47-card catalog — all cards render (so filtering is instant and the whole menu is indexable) while off-screen ones skip layout and paint
+- `content-visibility: auto` on the 46-card catalog — all cards render (so filtering is instant and the whole menu is indexable) while off-screen ones skip layout and paint
 - `interpolate-size: allow-keywords` — height animates to `auto` natively
 - `text-wrap: balance` / `pretty`
 - Fluid `clamp()` type scale — no breakpoint jumps

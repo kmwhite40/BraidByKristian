@@ -7,7 +7,7 @@ Target: **Vercel**. Nothing here depends on a secret being present.
 1. Push to GitHub.
 2. Import the repo in Vercel. Framework preset **Next.js** is detected; build command `pnpm build`, output default. No overrides needed.
 3. Set **`NEXT_PUBLIC_SITE_URL`** to the production origin (e.g. `https://braidsbykristian.com`).
-   > Do this first. Everything else works without config, but a wrong `SITE_URL` puts the wrong canonical on all 63 pages and poisons the sitemap.
+   > Do this first. Everything else works without config, but a wrong `SITE_URL` puts the wrong canonical on all 61 pages and poisons the sitemap.
 4. Deploy.
 
 ## Environment variables
@@ -43,7 +43,7 @@ If email is on the same domain, do not disturb existing `MX`/`TXT`. Resend's SPF
 - [ ] Deep link works: `/book?style=medium-knotless` preselects Medium Knotless
 - [ ] Contact form: `curl https://…/api/contact` → `{"configured":true}`, then send a real test
 - [ ] Rate limiting moved to Vercel WAF / Upstash (see SECURITY.md)
-- [ ] `/sitemap.xml` lists 58 URLs on the real domain
+- [ ] `/sitemap.xml` lists 56 URLs on the real domain
 - [ ] `/robots.txt` allows crawling
 - [ ] Submit the sitemap in Google Search Console
 - [ ] Replace the photography with clean, unwatermarked exports from K.Nett (see IMAGES.md)

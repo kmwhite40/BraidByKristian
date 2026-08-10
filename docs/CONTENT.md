@@ -5,7 +5,7 @@
 | File | Holds |
 | --- | --- |
 | `lib/content/site.ts` | **Start here.** Contact, address, hours, socials, deposit, fees, announcement bar. |
-| `lib/content/services.data.ts` | **Generated.** The 47-service catalog. Do not hand-edit. |
+| `lib/content/services.data.ts` | **Generated.** The 46-service catalog. Do not hand-edit. |
 | `lib/content/policies.ts` | Booking policies + preparation, with Kristian's verbatim wording preserved. |
 | `lib/content/faq.ts` | FAQs. Each carries a `source` tag. |
 | `lib/content/testimonials.ts` | Real reviews only. |
@@ -67,6 +67,10 @@ pnpm test
 ```
 
 The generator lives in the repo history and in `docs/` — it maps Acuity categories to slugs, derives sizes from names, and (importantly) derives `hairProvidedBy` **only** from evidence: the presence of Acuity's "Braiding Hair Color" form (ID `2943302`), or an explicit statement in the service description. Anything else becomes `'unspecified'`.
+
+`hairExplicitlyExcluded` is derived the same way — `true` when the description says *"hair is not included"* or *"bundles are not included"*. It is the one per-style fact that outranks the `site.stylistProvidesHair` switch, so a global "she supplies it now" can never tell a Miracle Knot client to skip their bundles.
+
+**Read hair through `hairArrangement(service)`, never off the raw fields.** It folds the global policy and the exceptions into one of `none` / `provided` / `client-brings` / `unknown`, and every hair-facing surface (card badge, service page, catalog filter, style finder) goes through it so they cannot contradict each other.
 
 After regenerating, **update the spot-check prices in `tests/unit/content.test.ts`** — they are hard-coded on purpose so a silent catalog drift fails loudly.
 
